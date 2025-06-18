@@ -10,6 +10,31 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox"
 import { UserPlus, Upload, Eye, EyeOff, FileText, CheckCircle, X, Loader2 } from "lucide-react"
 
+// Helper function to send welcome email
+async function sendWelcomeEmail(email: string, firstName: string) {
+  try {
+    // This would be your actual API call to send email
+    const response = await fetch("/api/send-welcome-email", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        firstName,
+        timestamp: new Date().toISOString(),
+      }),
+    })
+
+    if (response.ok) {
+      console.log("Welcome email sent successfully")
+    }
+  } catch (error) {
+    console.error("Error sending welcome email:", error)
+    // Don't block the user flow if email fails
+  }
+}
+
 export function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
@@ -162,32 +187,18 @@ export function RegisterForm() {
         files: uploadedFiles,
       })
 
-      // Success message
-      alert(
-        "¡Cuenta creada exitosamente!\n\nRecibirás un email de confirmación en los próximos minutos.\nTu cuenta será verificada en 24-72 horas.",
-      )
-
-      // Reset form
-      setFormData({
-        firstName: "",
-        lastName: "",
-        email: "",
-        phone: "",
-        country: "",
-        city: "",
-        password: "",
-        confirmPassword: "",
-        investmentBudget: "",
-        propertyType: "",
-        termsAccepted: false,
-        marketingConsent: false,
-        newsletterConsent: false,
+      // Success - redirect to welcome page with email confirmation
+      console.log("Form submitted successfully!", {
+        formData,
+        accountType,
+        files: uploadedFiles,
       })
-      setAccountType("")
-      setUploadedFiles({ identity: null, income: null })
 
-      // Redirect to login or dashboard
-      // window.location.href = '/login'
+      // Send welcome email (simulate API call)
+      await sendWelcomeEmail(formData.email, formData.firstName)
+
+      // Redirect to welcome page instead of showing alert and resetting
+      window.location.href = `/welcome?email=${encodeURIComponent(formData.email)}&name=${encodeURIComponent(formData.firstName)}`
     } catch (error) {
       console.error("Error creating account:", error)
       alert("Hubo un error al crear tu cuenta. Por favor intenta nuevamente.")
