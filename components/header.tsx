@@ -74,11 +74,14 @@ export function Header() {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <Button variant="ghost" className="text-slate-700 hover:text-amber-600 hover:bg-amber-50">
-              Iniciar Sesión
+            <Button variant="ghost" className="text-slate-700 hover:text-amber-600 hover:bg-amber-50" asChild>
+              <Link href="/login">Iniciar Sesión</Link>
             </Button>
-            <Button className="bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white shadow-lg hover:shadow-xl transition-all">
-              Registrarse
+            <Button
+              className="bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white shadow-lg hover:shadow-xl transition-all"
+              asChild
+            >
+              <Link href="/register">Registrarse</Link>
             </Button>
           </div>
 
@@ -112,10 +115,12 @@ export function Header() {
                 </Link>
               ))}
               <div className="pt-4 space-y-2">
-                <Button variant="ghost" className="w-full justify-start">
-                  Iniciar Sesión
+                <Button variant="ghost" className="w-full justify-start" asChild>
+                  <Link href="/login">Iniciar Sesión</Link>
                 </Button>
-                <Button className="w-full bg-gradient-to-r from-amber-600 to-amber-700">Registrarse</Button>
+                <Button className="w-full bg-gradient-to-r from-amber-600 to-amber-700" asChild>
+                  <Link href="/register">Registrarse</Link>
+                </Button>
               </div>
             </div>
           </div>
