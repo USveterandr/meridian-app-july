@@ -3,41 +3,38 @@ frontend:
   phases:
     preBuild:
       commands:
-        # Set npm cache location and Node.js options
+        # Set npm cache and configurations
         - export npm_config_cache=/tmp/.npm
+        - export CI=true
         - export NODE_OPTIONS="--max-old-space-size=4096"
-        # Clear any existing cache issues
-        - npm cache clean --force
-        # Install dependencies with better error handling
-        - npm ci --prefer-offline --no-audit --no-fund --silent || npm install --no-audit --no-fund --silent
+        # Clean cache only if needed
+        - npm cache clean --force || echo "Cache clean skipped"
+        # Install dependencies with multiple fallback strategies
+        - npm ci --prefer-offline --no-audit --no-fund --silent || npm ci --no-audit --no-fund --silent || npm install --no-audit --no-fund --silent
         # Verify installation
         - node --version
         - npm --version
-        - npm list --depth=0 || echo "Dependencies installed"
+        - npm list --depth=0 || echo "Dependency tree check completed"
     build:
       commands:
-        # Set production environment variables
+        # Set production environment
         - export NODE_ENV=production
         - export NEXT_TELEMETRY_DISABLED=1
-        - export NODE_OPTIONS="--max-old-space-size=4096"
-        # Build the application
-        - echo "Starting Next.js build..."
+        - export CI=true
+        # Build with memory optimization
         - npm run build
         # Generate sitemap (optional)
         - npm run postbuild || echo "Sitemap generation skipped"
-        - echo "Build completed successfully!"
   artifacts:
     baseDirectory: .next
     files:
       - '**/*'
   cache:
     paths:
-      # Cache node_modules for faster installs
       - node_modules/**/*
-      # Cache Next.js build cache
       - .next/cache/**/*
-      # Cache npm cache
       - /tmp/.npm/**/*
+      - ~/.npm/**/*
   customHeaders:
     - pattern: '**/*'
       headers:

@@ -1,18 +1,18 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Basic configuration for stable builds
+  // Basic stable configuration
   reactStrictMode: true,
   
-  // Image optimization
+  // Image optimization with basic settings
   images: {
-    formats: ['image/webp', 'image/avif'],
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
 
-  // Headers for caching and security
+  // Disable telemetry
+  telemetry: false,
+
+  // Basic headers
   async headers() {
     return [
       {
@@ -22,26 +22,16 @@ const nextConfig = {
             key: 'X-Content-Type-Options',
             value: 'nosniff',
           },
-          {
-            key: 'X-Frame-Options',
-            value: 'DENY',
-          },
-          {
-            key: 'X-XSS-Protection',
-            value: '1; mode=block',
-          },
         ],
       },
     ]
   },
 
-  // Enable SWC minification
+  // Enable optimizations
   swcMinify: true,
-
-  // Disable powered by header
   poweredByHeader: false,
 
-  // Ignore build errors for faster deployment
+  // Skip errors during build for faster deployment
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -49,7 +39,7 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
 
-  // Output configuration
+  // Standalone output for better deployment
   output: 'standalone',
 }
 
