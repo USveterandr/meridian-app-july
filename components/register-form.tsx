@@ -1,17 +1,61 @@
 "use client"
 
+import type React from "react"
+
 import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
-import { UserPlus, Upload, Eye, EyeOff } from "lucide-react"
+import { UserPlus, Upload, Eye, EyeOff, FileText, CheckCircle, X } from "lucide-react"
 
 export function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [accountType, setAccountType] = useState("")
+  const [uploadedFiles, setUploadedFiles] = useState<{
+    identity: File | null
+    income: File | null
+  }>({
+    identity: null,
+    income: null,
+  })
+
+  const handleFileUpload = (type: "identity" | "income", event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (file) {
+      // Validate file type
+      const allowedTypes = ["image/jpeg", "image/png", "image/jpg", "application/pdf"]
+      if (!allowedTypes.includes(file.type)) {
+        alert("Por favor sube un archivo válido (JPG, PNG, PDF)")
+        return
+      }
+
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        alert("El archivo debe ser menor a 5MB")
+        return
+      }
+
+      setUploadedFiles((prev) => ({
+        ...prev,
+        [type]: file,
+      }))
+    }
+  }
+
+  const removeFile = (type: "identity" | "income") => {
+    setUploadedFiles((prev) => ({
+      ...prev,
+      [type]: null,
+    }))
+  }
+
+  const triggerFileInput = (inputId: string) => {
+    const input = document.getElementById(inputId) as HTMLInputElement
+    input?.click()
+  }
 
   return (
     <section className="py-20 bg-white">
@@ -163,28 +207,124 @@ export function RegisterForm() {
               </div>
             )}
 
-            {/* Document Upload */}
+            {/* Document Upload - FIXED */}
             <div className="bg-slate-50 p-6 rounded-lg">
               <h3 className="text-lg font-semibold text-slate-900 mb-4">Verificación de Identidad</h3>
               <p className="text-slate-600 mb-4 text-sm">
                 Para cumplir con las regulaciones dominicanas, necesitamos verificar tu identidad
               </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Identity Document Upload */}
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">Documento de Identidad *</label>
-                  <Button variant="outline" className="w-full">
-                    <Upload className="h-4 w-4 mr-2" />
-                    Subir Cédula/Pasaporte
-                  </Button>
+
+                  {/* Hidden file input */}
+                  <input
+                    id="identity-upload"
+                    type="file"
+                    accept=".jpg,.jpeg,.png,.pdf"
+                    onChange={(e) => handleFileUpload("identity", e)}
+                    className="hidden"
+                  />
+
+                  {/* Upload button or file display */}
+                  {!uploadedFiles.identity ? (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="w-full border-dashed border-2 border-amber-300 hover:border-amber-500 hover:bg-amber-50"
+                      onClick={() => triggerFileInput("identity-upload")}
+                    >
+                      <Upload className="h-4 w-4 mr-2" />
+                      Subir Cédula/Pasaporte
+                    </Button>
+                  ) : (
+                    <div className="flex items-center justify-between p-3 bg-green-50 border border-green-200 rounded-lg">
+                      <div className="flex items-center">
+                        <CheckCircle className="h-5 w-5 text-green-600 mr-2" />
+                        <div>
+                          <p className="text-sm font-medium text-green-800">{uploadedFiles.identity.name}</p>
+                          <p className="text-xs text-green-600">
+                            {(uploadedFiles.identity.size / 1024 / 1024).toFixed(2)} MB
+                          </p>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => removeFile("identity")}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+                  )}
+                  <p className="text-xs text-slate-500 mt-1">JPG, PNG o PDF (máx. 5MB)</p>
                 </div>
+
+                {/* Income Document Upload */}
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">
                     Comprobante de Ingresos (Opcional)
                   </label>
-                  <Button variant="outline" className="w-full">
-                    <Upload className="h-4 w-4 mr-2" />
-                    Subir Documento
-                  </Button>
+
+                  {/* Hidden file input */}
+                  <input
+                    id="income-upload"
+                    type="file"
+                    accept=".jpg,.jpeg,.png,.pdf"
+                    onChange={(e) => handleFileUpload("income", e)}
+                    className="hidden"
+                  />
+
+                  {/* Upload button or file display */}
+                  {!uploadedFiles.income ? (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="w-full border-dashed border-2 border-slate-300 hover:border-slate-500 hover:bg-slate-50"
+                      onClick={() => triggerFileInput("income-upload")}
+                    >
+                      <Upload className="h-4 w-4 mr-2" />
+                      Subir Documento
+                    </Button>
+                  ) : (
+                    <div className="flex items-center justify-between p-3 bg-green-50 border border-green-200 rounded-lg">
+                      <div className="flex items-center">
+                        <CheckCircle className="h-5 w-5 text-green-600 mr-2" />
+                        <div>
+                          <p className="text-sm font-medium text-green-800">{uploadedFiles.income.name}</p>
+                          <p className="text-xs text-green-600">
+                            {(uploadedFiles.income.size / 1024 / 1024).toFixed(2)} MB
+                          </p>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => removeFile("income")}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+                  )}
+                  <p className="text-xs text-slate-500 mt-1">JPG, PNG o PDF (máx. 5MB)</p>
+                </div>
+              </div>
+
+              {/* Upload Instructions */}
+              <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <div className="flex items-start">
+                  <FileText className="h-5 w-5 text-blue-600 mr-2 mt-0.5" />
+                  <div>
+                    <h4 className="text-sm font-medium text-blue-800 mb-1">Documentos Aceptados:</h4>
+                    <ul className="text-xs text-blue-700 space-y-1">
+                      <li>• Cédula de identidad dominicana (ambos lados)</li>
+                      <li>• Pasaporte (página principal)</li>
+                      <li>• Licencia de conducir (si aplica)</li>
+                      <li>• Comprobante de ingresos (opcional pero recomendado)</li>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>

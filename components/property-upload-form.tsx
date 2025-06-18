@@ -1,22 +1,71 @@
 "use client"
 
+import type React from "react"
+
 import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Camera, Upload, X } from "lucide-react"
+import { Camera, Upload, X, CheckCircle, FileText } from "lucide-react"
 
 export function PropertyUploadForm() {
-  const [images, setImages] = useState<string[]>([])
+  const [images, setImages] = useState<File[]>([])
+  const [documents, setDocuments] = useState<{
+    cedula: File | null
+    titulo: File | null
+  }>({
+    cedula: null,
+    titulo: null,
+  })
 
-  const addImage = () => {
-    setImages([...images, `/placeholder.svg?height=200&width=300&text=Foto ${images.length + 1}`])
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(event.target.files || [])
+    const validFiles = files.filter((file) => {
+      const isValidType = file.type.startsWith("image/")
+      const isValidSize = file.size <= 10 * 1024 * 1024 // 10MB
+      return isValidType && isValidSize
+    })
+
+    setImages((prev) => [...prev, ...validFiles].slice(0, 10)) // Max 10 images
+  }
+
+  const handleDocumentUpload = (type: "cedula" | "titulo", event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (file) {
+      const allowedTypes = ["image/jpeg", "image/png", "image/jpg", "application/pdf"]
+      if (!allowedTypes.includes(file.type)) {
+        alert("Por favor sube un archivo válido (JPG, PNG, PDF)")
+        return
+      }
+
+      if (file.size > 5 * 1024 * 1024) {
+        alert("El archivo debe ser menor a 5MB")
+        return
+      }
+
+      setDocuments((prev) => ({
+        ...prev,
+        [type]: file,
+      }))
+    }
   }
 
   const removeImage = (index: number) => {
-    setImages(images.filter((_, i) => i !== index))
+    setImages((prev) => prev.filter((_, i) => i !== index))
+  }
+
+  const removeDocument = (type: "cedula" | "titulo") => {
+    setDocuments((prev) => ({
+      ...prev,
+      [type]: null,
+    }))
+  }
+
+  const triggerFileInput = (inputId: string) => {
+    const input = document.getElementById(inputId) as HTMLInputElement
+    input?.click()
   }
 
   return (
@@ -121,18 +170,31 @@ export function PropertyUploadForm() {
               />
             </div>
 
-            {/* Images */}
+            {/* Images Upload - FIXED */}
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">Fotos de la Propiedad *</label>
+
+              {/* Hidden file input */}
+              <input
+                id="images-upload"
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={handleImageUpload}
+                className="hidden"
+              />
+
+              {/* Images Grid */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-                {images.map((image, index) => (
+                {images.map((file, index) => (
                   <div key={index} className="relative">
                     <img
-                      src={image || "/placeholder.svg"}
+                      src={URL.createObjectURL(file) || "/placeholder.svg"}
                       alt={`Foto ${index + 1}`}
                       className="w-full h-32 object-cover rounded-lg"
                     />
                     <button
+                      type="button"
                       onClick={() => removeImage(index)}
                       className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
                     >
@@ -142,45 +204,128 @@ export function PropertyUploadForm() {
                 ))}
               </div>
 
+              {/* Upload Buttons */}
               <div className="flex gap-4">
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={addImage}
+                  onClick={() => triggerFileInput("images-upload")}
                   className="border-amber-600 text-amber-600 hover:bg-amber-600 hover:text-white"
+                  disabled={images.length >= 10}
                 >
                   <Camera className="h-4 w-4 mr-2" />
-                  Tomar Foto
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={addImage}
-                  className="border-amber-600 text-amber-600 hover:bg-amber-600 hover:text-white"
-                >
-                  <Upload className="h-4 w-4 mr-2" />
-                  Subir Archivo
+                  {images.length === 0 ? "Subir Fotos" : `Agregar Más (${images.length}/10)`}
                 </Button>
               </div>
+              <p className="text-xs text-slate-500 mt-2">Máximo 10 fotos, 10MB cada una</p>
             </div>
 
-            {/* Documents */}
+            {/* Documents - FIXED */}
             <div className="bg-amber-50 p-6 rounded-lg">
               <h3 className="text-lg font-semibold text-slate-900 mb-4">Documentos Requeridos</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Cedula Upload */}
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">Cédula de Identidad *</label>
-                  <Button variant="outline" className="w-full">
-                    <Upload className="h-4 w-4 mr-2" />
-                    Subir Cédula
-                  </Button>
+
+                  <input
+                    id="cedula-upload"
+                    type="file"
+                    accept=".jpg,.jpeg,.png,.pdf"
+                    onChange={(e) => handleDocumentUpload("cedula", e)}
+                    className="hidden"
+                  />
+
+                  {!documents.cedula ? (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="w-full border-dashed border-2 border-amber-300 hover:border-amber-500 hover:bg-amber-50"
+                      onClick={() => triggerFileInput("cedula-upload")}
+                    >
+                      <Upload className="h-4 w-4 mr-2" />
+                      Subir Cédula
+                    </Button>
+                  ) : (
+                    <div className="flex items-center justify-between p-3 bg-green-50 border border-green-200 rounded-lg">
+                      <div className="flex items-center">
+                        <CheckCircle className="h-5 w-5 text-green-600 mr-2" />
+                        <div>
+                          <p className="text-sm font-medium text-green-800">{documents.cedula.name}</p>
+                          <p className="text-xs text-green-600">
+                            {(documents.cedula.size / 1024 / 1024).toFixed(2)} MB
+                          </p>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => removeDocument("cedula")}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+                  )}
                 </div>
+
+                {/* Titulo Upload */}
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">Título de Propiedad *</label>
-                  <Button variant="outline" className="w-full">
-                    <Upload className="h-4 w-4 mr-2" />
-                    Subir Título
-                  </Button>
+
+                  <input
+                    id="titulo-upload"
+                    type="file"
+                    accept=".jpg,.jpeg,.png,.pdf"
+                    onChange={(e) => handleDocumentUpload("titulo", e)}
+                    className="hidden"
+                  />
+
+                  {!documents.titulo ? (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="w-full border-dashed border-2 border-amber-300 hover:border-amber-500 hover:bg-amber-50"
+                      onClick={() => triggerFileInput("titulo-upload")}
+                    >
+                      <Upload className="h-4 w-4 mr-2" />
+                      Subir Título
+                    </Button>
+                  ) : (
+                    <div className="flex items-center justify-between p-3 bg-green-50 border border-green-200 rounded-lg">
+                      <div className="flex items-center">
+                        <CheckCircle className="h-5 w-5 text-green-600 mr-2" />
+                        <div>
+                          <p className="text-sm font-medium text-green-800">{documents.titulo.name}</p>
+                          <p className="text-xs text-green-600">
+                            {(documents.titulo.size / 1024 / 1024).toFixed(2)} MB
+                          </p>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => removeDocument("titulo")}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Document Instructions */}
+              <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <div className="flex items-start">
+                  <FileText className="h-5 w-5 text-blue-600 mr-2 mt-0.5" />
+                  <div>
+                    <h4 className="text-sm font-medium text-blue-800 mb-1">Documentos Requeridos:</h4>
+                    <ul className="text-xs text-blue-700 space-y-1">
+                      <li>• Cédula de identidad (ambos lados en un archivo)</li>
+                      <li>• Título de propiedad registrado</li>
+                      <li>• Documentos deben estar vigentes y legibles</li>
+                      <li>• Formatos aceptados: JPG, PNG, PDF (máx. 5MB)</li>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>
