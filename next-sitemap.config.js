@@ -12,7 +12,6 @@ module.exports = {
         disallow: ["/api/", "/admin/", "/_next/"],
       },
     ],
-    additionalSitemaps: ["https://master.d22afasxl39ryh.amplifyapp.com/sitemap.xml"],
   },
   transform: async (config, path) => {
     // Custom priority for important pages

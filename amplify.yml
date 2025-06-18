@@ -3,24 +3,29 @@ frontend:
   phases:
     preBuild:
       commands:
-        # Set npm cache location
+        # Set npm cache location and Node.js options
         - export npm_config_cache=/tmp/.npm
+        - export NODE_OPTIONS="--max-old-space-size=4096"
         # Clear any existing cache issues
         - npm cache clean --force
-        # Install dependencies with error handling
+        # Install dependencies with better error handling
         - npm ci --prefer-offline --no-audit --no-fund --silent || npm install --no-audit --no-fund --silent
-        # Verify Node.js version
+        # Verify installation
         - node --version
         - npm --version
+        - npm list --depth=0 || echo "Dependencies installed"
     build:
       commands:
-        # Set production environment
+        # Set production environment variables
         - export NODE_ENV=production
         - export NEXT_TELEMETRY_DISABLED=1
-        # Build the application with error handling
-        - npm run build || (echo "Build failed, trying alternative approach" && npm run build:production)
+        - export NODE_OPTIONS="--max-old-space-size=4096"
+        # Build the application
+        - echo "Starting Next.js build..."
+        - npm run build
         # Generate sitemap (optional)
         - npm run postbuild || echo "Sitemap generation skipped"
+        - echo "Build completed successfully!"
   artifacts:
     baseDirectory: .next
     files:
