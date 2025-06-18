@@ -1,0 +1,48 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        # Set npm cache location
+        - export npm_config_cache=/tmp/.npm
+        # Clean install with optimizations
+        - npm ci --prefer-offline --no-audit --no-fund --silent
+        # Verify Node.js version
+        - node --version
+        - npm --version
+    build:
+      commands:
+        # Set production environment
+        - export NODE_ENV=production
+        - export NEXT_TELEMETRY_DISABLED=1
+        # Build the application
+        - npm run build
+        # Generate sitemap
+        - npm run postbuild || echo "Sitemap generation skipped"
+  artifacts:
+    baseDirectory: .next
+    files:
+      - '**/*'
+  cache:
+    paths:
+      # Cache node_modules for faster installs
+      - node_modules/**/*
+      # Cache Next.js build cache
+      - .next/cache/**/*
+      # Cache npm cache
+      - /tmp/.npm/**/*
+      # Cache TypeScript incremental builds
+      - .next/types/**/*
+  customHeaders:
+    - pattern: '**/*'
+      headers:
+        - key: 'Cache-Control'
+          value: 'public, max-age=31536000, immutable'
+    - pattern: '*.html'
+      headers:
+        - key: 'Cache-Control'
+          value: 'public, max-age=0, must-revalidate'
+    - pattern: '/api/**'
+      headers:
+        - key: 'Cache-Control'
+          value: 'no-cache, no-store, must-revalidate'
