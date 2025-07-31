@@ -21,7 +21,7 @@ env:
   variables:
     # These will be set in the Amplify Console
     EMAIL_REGION: 'us-east-1'
-    EMAIL_FROM: 'meridiandr1@gmail.com'
+    EMAIL_FROM: 'no-reply@investwithmeridian.com'
 features:
   - hosting
   - auth

@@ -2,7 +2,7 @@
 // This file should be used throughout the application to access environment variables
 export const env = {
   EMAIL_REGION: process.env.EMAIL_REGION || 'us-east-1',
-  EMAIL_FROM: process.env.EMAIL_FROM || 'no-reply@meridian.com',
+  EMAIL_FROM: process.env.EMAIL_FROM || 'no-reply@investwithmeridian.com',
   // Add other environment variables here
 } as const;
 
