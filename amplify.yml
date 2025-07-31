@@ -4,8 +4,8 @@ frontend:
     preBuild:
       commands:
         # Set Node.js version
-        - nvm install 18.18.2
-        - nvm use 18.18.2
+        - nvm install 18
+        - nvm use 18
         # Set npm cache and configurations
         - export npm_config_cache=/tmp/.npm
         - export CI=true
