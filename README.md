@@ -1,4 +1,4 @@
-# Next.js Community Starter
+# Meridian Real Estate Platform
 
 *Automatically synced with your [v0.dev](https://v0.dev) deployments*
 
@@ -6,9 +6,53 @@
 [![Built with v0](https://img.shields.io/badge/Built%20with-v0.dev-black?style=for-the-badge)](https://v0.dev/chat/projects/yZe4T0rlyCZ)
 
 ## Overview
+Meridian is a Next.js-based real estate platform template designed for property listings, investment opportunities, and property selling solutions. Built with modern web technologies and optimized for performance, this application provides a comprehensive foundation for real estate businesses.
 
-This repository will stay in sync with your deployed chats on [v0.dev](https://v0.dev).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.dev](https://v0.dev).
+## Key Features
+- **Property Listings**: Showcase available properties with detailed information and high-quality images
+- **Investment Opportunities**: Highlight investment potential and financial benefits
+- **Sell Your Property**: Guided process for property owners to list their properties
+- **Responsive Design**: Mobile-first approach with Tailwind CSS for optimal viewing across devices
+- **Form Interactions**: Contact forms, property search, and filtering capabilities
+- **AWS SES Integration**: Production-ready email service for user notifications and communications
+
+## Technology Stack
+- **Framework**: Next.js 14 with React 18+
+- **Styling**: Tailwind CSS 3.4.17 with Radix UI components
+- **Type System**: TypeScript 5+
+- **State Management**: React Hook Form for form handling
+- **Validation**: Zod schema validation
+- **Deployment**: AWS Amplify integration with Docker support
+- **API**: AWS SDK for SES integration
+
+## Development Environment
+- Node.js v18+
+- npm for package management
+- Docker for containerized deployment
+- Multi-stage build optimization for minimal image size
+
+## Deployment
+The application is configured for deployment on AWS Amplify with environment variables for:
+- AWS SES email configuration
+- Region settings
+- Secure credential management
+
+## Installation
+To run the application locally:
+1. Clone the repository
+2. Install dependencies with `npm install`
+3. Start development server with `npm run dev`
+
+For production deployment, follow the Docker build instructions or deploy directly to AWS Amplify.
+
+## Project Structure
+The application follows a modular structure with:
+- `app/` directory for page routes
+- `components/` for reusable UI components
+- `lib/` for utility functions and environment configuration
+- `styles/` for global styling
+
+This template is designed to be easily extended and customized to meet specific real estate business requirements.
 
 ## Production Deployment Guide
 
