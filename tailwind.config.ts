@@ -103,6 +103,18 @@ const config: Config = {
   corePlugins: {
     preflight: true,
   },
+  // Add safelist for critical animations and dynamic classes
+  safelist: [
+    'animate-gold-glow',
+    'gold-text-gradient',
+    'gold-border-gradient',
+    'luxury-shadow',
+    'gold-glow',
+    'premium-gradient',
+    'float-animation',
+    'luxury-card',
+    'premium-button'
+  ],
 } satisfies Config
 
 export default config
