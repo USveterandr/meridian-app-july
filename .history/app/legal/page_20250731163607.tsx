@@ -88,17 +88,17 @@ export default function LegalPage() {
     },
     {
       title: "Ley 158-01 sobre Fomento al Turismo",
-      description: "Crea el régimen de incentivos fiscales CONFOTUR para proyectos turísticos y de inversión."
-    },
-    {
-      title: "Ley General de Inmigración 285-04",
-      description: "Regula la entrada, permanencia y residencia de extranjeros en el país."
-    }
-  ]
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-amber-50">
-      {/* Hero Section */}
+            {[
+              {
+                title: "Seguridad Jurídica",
+                description: "Garantizamos que su inversión esté protegida por un marco legal sólido y documentación impecable."
+              },
+              {
+                title: "Prevención de Riesgos",
+                description: "Identificamos y mitigamos potenciales riesgos legales antes, durante y después de la transacción."
+              },
+              {
+                title: "Optimización Fiscal",
                 description: "Estructuramos sus inversiones para maximizar beneficios fiscales dentro del marco legal vigente."
               }
             ].map((item, index) => (

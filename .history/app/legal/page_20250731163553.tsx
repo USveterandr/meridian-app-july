@@ -76,29 +76,29 @@ export default function LegalPage() {
   const legalFramework = [
     {
       title: "Constitución Política",
-      description: "Garantiza el derecho a la propiedad privada y establece los principios fundamentales del sistema legal dominicano."
-    },
-    {
-      title: "Código Civil",
-      description: "Regula las relaciones civiles, contratos, propiedad y obligaciones entre personas físicas y jurídicas."
-    },
-    {
-      title: "Ley 108-05 sobre Registro Inmobiliario",
-      description: "Establece el sistema de registro de títulos y garantiza la seguridad jurídica de las transacciones inmobiliarias."
-    },
-    {
-      title: "Ley 158-01 sobre Fomento al Turismo",
-      description: "Crea el régimen de incentivos fiscales CONFOTUR para proyectos turísticos y de inversión."
-    },
-    {
-      title: "Ley General de Inmigración 285-04",
-      description: "Regula la entrada, permanencia y residencia de extranjeros en el país."
-    }
-  ]
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-amber-50">
-      {/* Hero Section */}
+      {/* Why Legal Advice */}
+      <div className="py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-slate-900 mb-4">¿Por Qué Necesita Asesoría Legal?</h2>
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+              El mercado inmobiliario dominicano tiene sus particularidades legales. Una asesoría adecuada es crucial para una inversión segura.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                title: "Seguridad Jurídica",
+                description: "Garantizamos que su inversión esté protegida por un marco legal sólido y documentación impecable."
+              },
+              {
+                title: "Prevención de Riesgos",
+                description: "Identificamos y mitigamos potenciales riesgos legales antes, durante y después de la transacción."
+              },
+              {
+                title: "Optimización Fiscal",
                 description: "Estructuramos sus inversiones para maximizar beneficios fiscales dentro del marco legal vigente."
               }
             ].map((item, index) => (

@@ -97,8 +97,8 @@ export default function LegalPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-amber-50">
-      {/* Hero Section */}
+              {
+                title: "Optimización Fiscal",
                 description: "Estructuramos sus inversiones para maximizar beneficios fiscales dentro del marco legal vigente."
               }
             ].map((item, index) => (
