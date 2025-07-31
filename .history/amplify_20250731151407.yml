@@ -8,7 +8,6 @@ applications:
             - nvm use 18
             - rm -rf node_modules package-lock.json
             - npm install
-            - npm audit fix
         build:
           commands:
             - echo "Starting build phase..."
