@@ -25,7 +25,10 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "paths": {
+      "@/components/*": ["./components/*"]
+    }
     // Existing settings remain unchanged
     // ... (keep all existing configuration)
   },
