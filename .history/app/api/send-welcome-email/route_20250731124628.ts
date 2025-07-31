@@ -1,6 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { env } from '@/lib/env'
-import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
 
 export async function POST(request: NextRequest) {
   try {
@@ -11,8 +10,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Email and firstName are required" }, { status: 400 })
     }
 
-    // Initialize AWS SES v3 Client
-    const sesClient = new SESClient({ 
+    // Initialize AWS SDK with environment variables
+    const AWS = require('aws-sdk');
+    const ses = new AWS.SES({ 
       region: env.EMAIL_REGION
     });
 
@@ -70,9 +70,8 @@ export async function POST(request: NextRequest) {
     };
 
     try {
-      // Send email using AWS SES v3
-      const command = new SendEmailCommand(params);
-      const result = await sesClient.send(command);
+      // Send email using AWS SES
+      const result = await ses.sendEmail(params).promise();
       
       return NextResponse.json({
         success: true,

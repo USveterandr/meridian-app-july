@@ -1,5 +1,4 @@
 "use client"
-import { Suspense } from "react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { WelcomeHero } from "@/components/welcome-hero"
@@ -10,9 +9,7 @@ export default function WelcomePage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
       <Header />
-      <Suspense fallback={<div>Loading welcome message...</div>}>
-        <WelcomeHero />
-      </Suspense>
+      <WelcomeHero />
       <WelcomeSteps />
       <WelcomeResources />
       <Footer />

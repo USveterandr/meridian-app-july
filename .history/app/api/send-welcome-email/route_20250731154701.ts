@@ -70,9 +70,8 @@ export async function POST(request: NextRequest) {
     };
 
     try {
-      // Send email using AWS SES v3
-      const command = new SendEmailCommand(params);
-      const result = await sesClient.send(command);
+      // Send email using AWS SES
+      const result = await ses.sendEmail(params).promise();
       
       return NextResponse.json({
         success: true,
