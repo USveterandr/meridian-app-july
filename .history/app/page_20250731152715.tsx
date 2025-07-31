@@ -1,3 +1,4 @@
+import Image from "next/image"
 import { Header } from "@/components/header"
 import { HeroSection } from "@/components/hero-section"
 import { PropertyTypes } from "@/components/property-types"
