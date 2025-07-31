@@ -1,0 +1,33 @@
+# Production Dockerfile for Next.js application
+FROM node:18-alpine as builder
+
+WORKDIR /app
+
+# Copy package files
+COPY package.json pnpm-lock.yaml ./
+
+# Install dependencies
+RUN npm ci
+
+# Copy source code
+COPY . .
+
+# Build application
+RUN npm run build
+
+# Create production image
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Copy built files from builder stage
+COPY --from=builder /app .
+
+# Set environment for production
+ENV NODE_ENV=production
+
+# Disable dev features
+ENV NEXT_TELEMETRY_DISABLED=1
+
+# Run the application
+CMD ["npm", "start"]

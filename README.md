@@ -10,6 +10,45 @@
 This repository will stay in sync with your deployed chats on [v0.dev](https://v0.dev).
 Any changes you make to your deployed app will be automatically pushed to this repository from [v0.dev](https://v0.dev).
 
+## Production Deployment Guide
+
+### AWS Amplify Configuration
+
+1. In the AWS Amplify Console, configure these environment variables:
+   - `EMAIL_REGION`: Your AWS region (e.g., 'us-east-1')
+   - `EMAIL_FROM`: The email address to send from (e.g., 'meridiandr1@gmail.com')
+   - `AWS_ACCESS_KEY_ID`: Your AWS access key ID
+   - `AWS_SECRET_ACCESS_KEY`: Your AWS secret access key
+
+2. Set the build settings to use the following commands:
+   ```yaml
+   version: 1
+   applications:
+     - frontend:
+         phases:
+           preBuild:
+             commands:
+               - nvm install 18
+               - nvm use 18
+               - npm ci
+           build:
+             commands:
+               - npm run build
+   ```
+
+### Security Best Practices
+
+- Never store AWS credentials in version control
+- Use AWS IAM roles and policies to limit permissions
+- Rotate credentials regularly
+- Enable AWS CloudTrail logging for audit purposes
+
+### Production Troubleshooting
+
+- Check AWS CloudWatch logs for SES errors
+- Monitor email sending limits in AWS SES console
+- Verify email templates are properly verified in AWS SES
+
 ## Deployment
 
 Your project is live at:

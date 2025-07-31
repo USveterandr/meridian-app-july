@@ -1,0 +1,53 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        # Set Node.js version
+        - nvm install 18
+        - nvm use 18
+        # Set npm cache and configurations
+        - export npm_config_cache=/tmp/.npm
+        - export CI=true
+        - export NODE_OPTIONS="--max-old-space-size=4096"
+        # Clean cache only if needed
+        - npm cache clean --force || echo "Cache clean skipped"
+        # Install dependencies with multiple fallback strategies
+        - npm ci --prefer-offline --no-audit --no-fund --silent || npm ci --no-audit --no-fund --silent || npm install --no-audit --no-fund --silent
+        # Verify installation
+        - node --version
+        - npm --version
+        - npm list --depth=0 || echo "Dependency tree check completed"
+    build:
+      commands:
+        # Set production environment
+        - export NODE_ENV=production
+        - export NEXT_TELEMETRY_DISABLED=1
+        - export CI=true
+        # Build with memory optimization
+        - npm run build
+        # Generate sitemap (optional)
+        - npm run postbuild || echo "Sitemap generation skipped"
+  artifacts:
+    baseDirectory: .next
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - node_modules/**/*
+      - .next/cache/**/*
+      - /tmp/.npm/**/*
+      - ~/.npm/**/*
+  customHeaders:
+    - pattern: '**/*'
+      headers:
+        - key: Cache-Control
+          value: public, max-age=31536000, immutable
+    - pattern: '*.html'
+      headers:
+        - key: Cache-Control
+          value: public, max-age=0, must-revalidate
+    - pattern: /api/**
+      headers:
+        - key: Cache-Control
+          value: no-cache, no-store, must-revalidate

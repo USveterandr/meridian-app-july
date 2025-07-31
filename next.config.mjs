@@ -6,15 +6,20 @@ const __dirname = path.dirname(__filename);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Enable experimental features for better performance
+  // Enable production optimizations
+  productionBrowserSourceMaps: false,
+  
+  // Performance optimizations
   experimental: {
     optimizeCss: true,
     optimizePackageImports: ['lucide-react', '@radix-ui/react-dropdown-menu'],
+    serverComponentsExternalPackages: ['aws-sdk']
   },
 
   // Compiler optimizations
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
+    styledComponents: true
   },
 
   // Image optimization
