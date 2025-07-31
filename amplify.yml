@@ -36,13 +36,13 @@ frontend:
   customHeaders:
     - pattern: '**/*'
       headers:
-        - key: 'Cache-Control'
-          value: 'public, max-age=31536000, immutable'
+        - key: Cache-Control
+          value: public, max-age=31536000, immutable
     - pattern: '*.html'
       headers:
-        - key: 'Cache-Control'
-          value: 'public, max-age=0, must-revalidate'
-    - pattern: '/api/**'
+        - key: Cache-Control
+          value: public, max-age=0, must-revalidate
+    - pattern: /api/**
       headers:
-        - key: 'Cache-Control'
-          value: 'no-cache, no-store, must-revalidate'
+        - key: Cache-Control
+          value: no-cache, no-store, must-revalidate

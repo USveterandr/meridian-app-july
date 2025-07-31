@@ -1,3 +1,9 @@
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Enable experimental features for better performance
@@ -72,7 +78,7 @@ const nextConfig = {
           chunks: 'all',
           cacheGroups: {
             vendor: {
-              test: /[\\/]node_modules[\\/]/,
+              test: /[\/]node_modules[\/]/,
               name: 'vendors',
               chunks: 'all',
               priority: 10,
@@ -92,7 +98,7 @@ const nextConfig = {
     // Optimize bundle size
     config.resolve.alias = {
       ...config.resolve.alias,
-      '@': require('path').resolve(__dirname),
+      '@': path.resolve(__dirname),
     }
 
     return config
@@ -104,9 +110,6 @@ const nextConfig = {
       transform: 'lucide-react/dist/esm/icons/{{member}}',
     },
   },
-
-  // Enable SWC minification
-  swcMinify: true,
 
   // Compress responses
   compress: true,
