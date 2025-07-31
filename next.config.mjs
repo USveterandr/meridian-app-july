@@ -12,8 +12,7 @@ const nextConfig = {
   // Performance optimizations
   experimental: {
     optimizeCss: true,
-    optimizePackageImports: ['lucide-react', '@radix-ui/react-dropdown-menu'],
-    serverComponentsExternalPackages: ['aws-sdk']
+    optimizePackageImports: ['lucide-react', '@radix-ui/react-dropdown-menu']
   },
 
   // Compiler optimizations
@@ -83,7 +82,7 @@ const nextConfig = {
           chunks: 'all',
           cacheGroups: {
             vendor: {
-              test: /[\/]node_modules[\/]/,
+              test: /[\\/]node_modules[\\/]/,
               name: 'vendors',
               chunks: 'all',
               priority: 10,

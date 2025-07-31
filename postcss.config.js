@@ -21,6 +21,5 @@ module.exports = {
       },
     }),
   },
-  // Add parser for complex CSS selectors
-  parser: undefined, // Let PostCSS use the default parser
+  // Remove problematic parser setting
 }

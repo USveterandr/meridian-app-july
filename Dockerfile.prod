@@ -7,12 +7,12 @@ WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
 
 # Install dependencies
-RUN npm ci
+COPY package.json ./
+# Remove any existing lockfiles to avoid conflicts
+RUN rm -f package-lock.json || true
+RUN npm install --prefer-offline --no-audit --no-fund
 
-# Copy source code
-COPY . .
-
-# Build application
+# Build the application
 RUN npm run build
 
 # Create production image
