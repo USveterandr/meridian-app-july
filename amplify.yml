@@ -9,7 +9,9 @@ applications:
             - npm install
         build:
           commands:
+            - echo "Starting build phase..."
             - npm run build
+            - echo "Finished build phase."
       artifacts:
         baseDirectory: .next
         files:
