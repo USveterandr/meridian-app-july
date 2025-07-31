@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
                   </div>
                   
                   <div style="text-align: center; margin: 30px 0;">
-                    <a href="${env.NEXT_PUBLIC_SITE_URL}/verify-email?token=example-token"
+                    <a href="${env.NEXT_PUBLIC_SITE_URL}/verify-email?token=example-token" 
                        style="background: #d97706; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold;">
                       Confirmar Email
                     </a>
