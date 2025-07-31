@@ -17,6 +17,9 @@ applications:
       cache:
         paths:
           - node_modules/**/*
+      env:
+        variables:
+          NODE_OPTIONS: '--max-old-space-size=6144'
 env:
   variables:
     # These will be set in the Amplify Console
