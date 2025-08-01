@@ -134,37 +134,6 @@ export function RegisterForm() {
     input?.click()
   }
 
-  const validateForm = () => {
-    const errors: string[] = []
-
-    // Required fields validation
-    if (!accountType) errors.push("Tipo de cuenta es requerido")
-    if (!formData.firstName.trim()) errors.push("Nombre es requerido")
-    if (!formData.lastName.trim()) errors.push("Apellido es requerido")
-    if (!formData.email.trim()) errors.push("Email es requerido")
-    if (!formData.phone.trim()) errors.push("Teléfono es requerido")
-    if (!formData.country) errors.push("País es requerido")
-    if (!formData.cedula.trim()) errors.push("Cédula es requerida")
-    if (formData.cedula.trim() && cedulaValidationStatus !== 'valid') errors.push("Cédula no válida o no encontrada")
-    if (!formData.password) errors.push("Contraseña es requerida")
-    if (!formData.confirmPassword) errors.push("Confirmación de contraseña es requerida")
-    if (!formData.termsAccepted) errors.push("Debes aceptar los términos y condiciones")
-    if (!uploadedFiles.identity) errors.push("Documento de identidad es requerido")
-
-    // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (formData.email && !emailRegex.test(formData.email)) {
-      errors.push("Email no es válido")
-    }
-
-    // Password validation
-    if (formData.password && formData.password.length < 8) {
-      errors.push("La contraseña debe tener al menos 8 caracteres")
-    }
-
-    // Password match validation
-    if (formData.password !== formData.confirmPassword) {
-      errors.push("Las contraseñas no coinciden")
     }
 
     // Phone validation (basic)
@@ -316,43 +285,6 @@ export function RegisterForm() {
                 </div>
               </div>
 
-              {/* Cedula Field */}
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Número de Cédula Dominicana *</label>
-                <div className="relative">
-                  <Input
-                    type="text"
-                    value={formData.cedula}
-                    onChange={handleCedulaChange}
-                    placeholder="000-0000000-0"
-                    maxLength={11}
-                    aria-label="Número de Cédula Dominicana"
-                    className={`${
-                      !formData.cedula.trim() ? "border-red-300" : ""
-                    } ${
-                      cedulaValidationStatus === 'valid' ? "border-green-500" :
-                      cedulaValidationStatus === 'invalid' ? "border-red-500" : ""
-                    }`}
-                  />
-                  {isCedulaValidating && (
-                    <Loader2 className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-amber-600 animate-spin" />
-                  )}
-                  {cedulaValidationStatus === 'valid' && !isCedulaValidating && (
-                    <CheckCircle className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-green-500" />
-                  )}
-                  {cedulaValidationStatus === 'invalid' && !isCedulaValidating && (
-                    <X className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-red-500" />
-                  )}
-                </div>
-                {cedulaValidationStatus === 'valid' && (
-                  <p className="text-xs text-green-600 mt-1">Cédula verificada exitosamente.</p>
-                )}
-                {cedulaValidationStatus === 'invalid' && (
-                  <p className="text-xs text-red-600 mt-1">No se pudo verificar la cédula. Por favor, verifica el número o intenta de nuevo.</p>
-                )}
-                <p className="text-xs text-slate-500 mt-1">Ingresa tu número de cédula dominicana (11 dígitos).</p>
-              </div>
-
               {/* Location */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
@@ -399,7 +331,6 @@ export function RegisterForm() {
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
                       className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600"
-                      aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
                     >
                       {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </button>
@@ -419,7 +350,6 @@ export function RegisterForm() {
                       type="button"
                       onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                       className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600"
-                      aria-label={showConfirmPassword ? "Ocultar confirmación de contraseña" : "Mostrar confirmación de contraseña"}
                     >
                       {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </button>
@@ -499,7 +429,6 @@ export function RegisterForm() {
                           !uploadedFiles.identity ? "border-red-300" : "border-amber-300"
                         }`}
                         onClick={() => triggerFileInput("identity-upload")}
-                        aria-label="Subir documento de identidad"
                       >
                         <Upload className="h-4 w-4 mr-2" />
                         Subir Cédula/Pasaporte
@@ -547,7 +476,6 @@ export function RegisterForm() {
                         variant="outline"
                         className="w-full border-dashed border-2 border-slate-300 hover:border-slate-500 hover:bg-slate-50"
                         onClick={() => triggerFileInput("income-upload")}
-                        aria-label="Subir comprobante de ingresos"
                       >
                         <Upload className="h-4 w-4 mr-2" />
                         Subir Documento

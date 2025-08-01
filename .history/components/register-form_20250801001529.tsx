@@ -326,7 +326,6 @@ export function RegisterForm() {
                     onChange={handleCedulaChange}
                     placeholder="000-0000000-0"
                     maxLength={11}
-                    aria-label="Número de Cédula Dominicana"
                     className={`${
                       !formData.cedula.trim() ? "border-red-300" : ""
                     } ${
@@ -422,8 +421,6 @@ export function RegisterForm() {
                       aria-label={showConfirmPassword ? "Ocultar confirmación de contraseña" : "Mostrar confirmación de contraseña"}
                     >
                       {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                    </button>
-                  </div>
                 </div>
               </div>
 
@@ -499,7 +496,6 @@ export function RegisterForm() {
                           !uploadedFiles.identity ? "border-red-300" : "border-amber-300"
                         }`}
                         onClick={() => triggerFileInput("identity-upload")}
-                        aria-label="Subir documento de identidad"
                       >
                         <Upload className="h-4 w-4 mr-2" />
                         Subir Cédula/Pasaporte
@@ -547,7 +543,6 @@ export function RegisterForm() {
                         variant="outline"
                         className="w-full border-dashed border-2 border-slate-300 hover:border-slate-500 hover:bg-slate-50"
                         onClick={() => triggerFileInput("income-upload")}
-                        aria-label="Subir comprobante de ingresos"
                       >
                         <Upload className="h-4 w-4 mr-2" />
                         Subir Documento
