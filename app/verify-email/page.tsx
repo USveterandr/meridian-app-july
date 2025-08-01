@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -65,40 +65,42 @@ export default function VerifyEmailPage() {
   }, [token]);
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold">Verificación de Email</CardTitle>
-          <CardDescription>
-            {status === 'loading' && 'Estamos verificando tu email...'}
-            {status === 'success' && '¡Verificación Completa!'}
-            {status === 'error' && 'Error en la Verificación'}
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="text-center space-y-4">
-          {status === 'loading' && (
-            <div className="flex justify-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-600"></div>
-            </div>
-          )}
-          {status === 'success' && (
-            <>
-              <p className="text-green-600">{message}</p>
-              <Button asChild>
-                <Link href="/login">Ir a Iniciar Sesión</Link>
-              </Button>
-            </>
-          )}
-          {status === 'error' && (
-            <>
-              <p className="text-red-600">{message}</p>
-              <Button variant="outline" asChild>
-                <Link href="/">Volver al Inicio</Link>
-              </Button>
-            </>
-          )}
-        </CardContent>
-      </Card>
-    </div>
+    <Suspense fallback={<div>Loading...</div>}>
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <Card className="w-full max-w-md">
+          <CardHeader className="text-center">
+            <CardTitle className="text-2xl font-bold">Verificación de Email</CardTitle>
+            <CardDescription>
+              {status === 'loading' && 'Estamos verificando tu email...'}
+              {status === 'success' && '¡Verificación Completa!'}
+              {status === 'error' && 'Error en la Verificación'}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="text-center space-y-4">
+            {status === 'loading' && (
+              <div className="flex justify-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-600"></div>
+              </div>
+            )}
+            {status === 'success' && (
+              <>
+                <p className="text-green-600">{message}</p>
+                <Button asChild>
+                  <Link href="/login">Ir a Iniciar Sesión</Link>
+                </Button>
+              </>
+            )}
+            {status === 'error' && (
+              <>
+                <p className="text-red-600">{message}</p>
+                <Button variant="outline" asChild>
+                  <Link href="/">Volver al Inicio</Link>
+                </Button>
+              </>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </Suspense>
   );
 }
