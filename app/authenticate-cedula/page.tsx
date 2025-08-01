@@ -27,15 +27,14 @@ export default function AuthenticateCedulaPage() {
 
       const data = await response.json();
 
-      if (response.ok) {
+      if (response.ok && data.valid) { // Check for HTTP OK and valid: true
         // Handle successful authentication
-        // For now, we'll just alert and redirect to the dashboard.
-        // In a real app, you might store a token or user session here.
         alert(data.message || 'Cédula authenticated successfully!');
         router.push('/dashboard'); // Redirect to dashboard on success
       } else {
-        // Handle authentication failure
-        setError(data.error || 'Authentication failed.');
+        // Handle authentication failure or if cédula is not valid
+        // The error message could come from data.error or data.message depending on API response
+        setError(data.error || data.message || 'Cédula validation failed.');
       }
     } catch (err) {
       console.error('Error submitting cédula:', err);

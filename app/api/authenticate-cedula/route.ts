@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+const API_BASE_URL = 'https://api.digital.gob.do';
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -9,41 +11,45 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Cédula number is required.' }, { status: 400 });
     }
 
-    console.log('Received cédula for authentication (placeholder):', cedulaNumber);
+    // Sanitize cedulaNumber for URL, e.g., remove hyphens if any, though API might handle them
+    const sanitizedCedulaNumber = cedulaNumber.replace(/-/g, '');
+    const apiUrl = `${API_BASE_URL}/citizens/${sanitizedCedulaNumber}/validate`;
 
-    // Placeholder for actual API call to the cédula authentication service
-    // In a real application, you would make a request to the external API here.
-    // Example:
-    // const apiResponse = await fetch('https://api.cedula-service.com/verify', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     'Authorization': `Bearer ${process.env.CEDULA_API_KEY}`,
-    //   },
-    //   body: JSON.stringify({ cedula: cedulaNumber }),
-    // });
-    // const data = await apiResponse.json();
+    console.log(`Calling cédula validation API: ${apiUrl}`);
 
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    const apiResponse = await fetch(apiUrl, {
+      method: 'GET',
+      // Add any required headers here, e.g., Authorization if the API needs it
+      // headers: {
+      //   'Authorization': `Bearer ${process.env.CEDULA_API_KEY}`,
+      // },
+    });
 
-    // Placeholder logic for authentication result
-    // For demonstration, let's assume any cédula number starting with '1' is valid.
-    if (cedulaNumber.startsWith('1')) {
-      // Simulate a successful authentication
-      return NextResponse.json({
-        message: 'Cédula authenticated successfully.',
-        // In a real scenario, you might return user data or a token
-        // user: { id: 'user123', name: 'John Doe' },
-        // token: 'a-secure-jwt-token',
-      }, { status: 200 });
+    const data = await apiResponse.json();
+
+    if (apiResponse.ok) { // Status 200 OK
+      // Check the 'valid' field from ResponseCedulaValidationDto
+      if (data.valid) {
+        return NextResponse.json({
+          message: 'Cédula authenticated successfully.',
+          valid: data.valid,
+        }, { status: 200 });
+      } else {
+        // API returned 200 OK but valid is false
+        return NextResponse.json({ error: 'Cédula is not valid.', valid: false }, { status: 200 }); // Or 400 depending on how you want to handle it
+      }
+    } else if (apiResponse.status === 404) {
+      // Handle 404 Not Found from ResponseNotFoundDto
+      // The API might return { valid: false, message: '...' }
+      return NextResponse.json({ error: data.message || 'Cédula not found.', valid: data.valid || false }, { status: 404 });
     } else {
-      // Simulate a failed authentication
-      return NextResponse.json({ error: 'Invalid cédula number or authentication failed.' }, { status: 401 });
+      // Handle other error statuses
+      console.error('Cédula API returned an error status:', apiResponse.status, data);
+      return NextResponse.json({ error: data.message || 'Failed to validate cédula with the external service.' }, { status: apiResponse.status });
     }
 
   } catch (error) {
     console.error('Error in cédula authentication API route:', error);
-    return NextResponse.json({ error: 'An internal server error occurred.' }, { status: 500 });
+    return NextResponse.json({ error: 'An internal server error occurred while contacting the validation service.' }, { status: 500 });
   }
 }
