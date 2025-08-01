@@ -238,10 +238,10 @@ export default function LegalPage() {
           <div className="text-center">
             <h3 className="text-2xl font-bold mb-4">Aviso Legal</h3>
             <p className="text-slate-300 leading-relaxed">
-              La información proporcionada en este sitio web tiene fines informativos generales y no constituye
-              asesoramiento legal. La recepción de esta información no crea una relación abogado-cliente.
-              No actúe sobre la base de esta información sin buscar asesoramiento legal profesional.
-              Los resultados pasados no garantizan resultados futuros. Meridian República Dominicana y sus
+              La información proporcionada en este sitio web tiene fines informativos generales y no constituye 
+              asesoramiento legal. La recepción de esta información no crea una relación abogado-cliente. 
+              No actúe sobre la base de esta información sin buscar asesoramiento legal profesional. 
+              Los resultados pasados no garantizan resultados futuros. Meridian República Dominicana y sus 
               afiliados no se responsabilizan por las acciones tomadas basadas en la información aquí contenida.
             </p>
             <p className="text-slate-400 mt-6 text-sm">
