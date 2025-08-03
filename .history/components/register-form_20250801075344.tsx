@@ -619,59 +619,6 @@ export function RegisterForm() {
                           !uploadedFiles.titleCopy ? "border-red-300" : "border-amber-300"
                         }`}
                         onClick={() => triggerFileInput("titlecopy-upload")}
-                        aria-label="Subir copia del título de propiedad"
-                      >
-                        <Upload className="h-4 w-4 mr-2" />
-                        Subir Copia del Título
-                      </Button>
-                    ) : (
-                      <div className="flex items-center justify-between p-3 bg-green-50 border border-green-200 rounded-lg">
-                        <div className="flex items-center">
-                          <CheckCircle className="h-5 w-5 text-green-600 mr-2" />
-                          <div>
-                            <p className="text-sm font-medium text-green-800">{uploadedFiles.titleCopy.name}</p>
-                            <p className="text-xs text-green-600">
-                              {(uploadedFiles.titleCopy.size / 1024 / 1024).toFixed(2)} MB
-                            </p>
-                          </div>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => removeFile("titleCopy")}
-                          className="text-red-500 hover:text-red-700"
-                        >
-                          <X className="h-4 w-4" />
-                        </button>
-                      </div>
-                    )}
-                    <p className="text-xs text-slate-500 mt-1">JPG, PNG o PDF de la copia del título de propiedad (máx. 5MB)</p>
-                  </div>
-                </div>
-
-              {/* Terms and Conditions */}
-              <div className="space-y-4">
-                <div className="flex items-start space-x-3">
-                  <Checkbox
-                    id="terms"
-                    checked={formData.termsAccepted}
-                    onCheckedChange={(checked) => handleInputChange("termsAccepted", checked as boolean)}
-                    className={!formData.termsAccepted ? "border-red-500" : ""}
-                  />
-                  <label htmlFor="terms" className="text-sm text-slate-600">
-                    Acepto los{" "}
-                    <a href="/terms" className="text-amber-600 hover:underline">
-                      Términos y Condiciones
-                    </a>{" "}
-                    y la{" "}
-                    <a href="/privacy" className="text-amber-600 hover:underline">
-                      Política de Privacidad
-                    </a>{" "}
-                    *
-                  </label>
-                </div>
-                <div className="flex items-start space-x-3">
-                  <Checkbox
-                    id="marketing"
                     checked={formData.marketingConsent}
                     onCheckedChange={(checked) => handleInputChange("marketingConsent", checked as boolean)}
                   />

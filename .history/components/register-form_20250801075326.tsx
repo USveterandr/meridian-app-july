@@ -101,7 +101,7 @@ export function RegisterForm() {
     }
   }
 
-  const handleFileUpload = (type: "identity" | "income" | "titleCopy", event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = (type: "identity" | "income", event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (file) {
       // Validate file type
@@ -124,7 +124,7 @@ export function RegisterForm() {
     }
   }
 
-  const removeFile = (type: "identity" | "income" | "titleCopy") => {
+  const removeFile = (type: "identity" | "income") => {
     setUploadedFiles((prev) => ({
       ...prev,
       [type]: null,
@@ -152,7 +152,6 @@ export function RegisterForm() {
     if (!formData.confirmPassword) errors.push("Confirmación de contraseña es requerida")
     if (!formData.termsAccepted) errors.push("Debes aceptar los términos y condiciones")
     if (!uploadedFiles.identity) errors.push("Documento de identidad es requerido")
-    if (!uploadedFiles.titleCopy) errors.push("Copia del Título de Propiedad es requerida") // Added title copy requirement
 
     // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -212,9 +211,6 @@ export function RegisterForm() {
       }
       if (uploadedFiles.income) {
         submitData.append("incomeDocument", uploadedFiles.income)
-      }
-      if (uploadedFiles.titleCopy) { // Added title copy file submission
-        submitData.append("titleCopyDocument", uploadedFiles.titleCopy)
       }
 
       // Here you would normally send to your API
@@ -598,55 +594,6 @@ export function RegisterForm() {
                   </div>
                 </div>
               </div>
-
-                  {/* Title Copy Document Upload */}
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">Copia del Título de Propiedad *</label>
-
-                    <input
-                      id="titlecopy-upload"
-                      type="file"
-                      accept=".jpg,.jpeg,.png,.pdf"
-                      onChange={(e) => handleFileUpload("titleCopy", e)}
-                      className="hidden"
-                    />
-
-                    {!uploadedFiles.titleCopy ? (
-                      <Button
-                        type="button"
-                        variant="outline"
-                        className={`w-full border-dashed border-2 hover:border-amber-500 hover:bg-amber-50 ${
-                          !uploadedFiles.titleCopy ? "border-red-300" : "border-amber-300"
-                        }`}
-                        onClick={() => triggerFileInput("titlecopy-upload")}
-                        aria-label="Subir copia del título de propiedad"
-                      >
-                        <Upload className="h-4 w-4 mr-2" />
-                        Subir Copia del Título
-                      </Button>
-                    ) : (
-                      <div className="flex items-center justify-between p-3 bg-green-50 border border-green-200 rounded-lg">
-                        <div className="flex items-center">
-                          <CheckCircle className="h-5 w-5 text-green-600 mr-2" />
-                          <div>
-                            <p className="text-sm font-medium text-green-800">{uploadedFiles.titleCopy.name}</p>
-                            <p className="text-xs text-green-600">
-                              {(uploadedFiles.titleCopy.size / 1024 / 1024).toFixed(2)} MB
-                            </p>
-                          </div>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => removeFile("titleCopy")}
-                          className="text-red-500 hover:text-red-700"
-                        >
-                          <X className="h-4 w-4" />
-                        </button>
-                      </div>
-                    )}
-                    <p className="text-xs text-slate-500 mt-1">JPG, PNG o PDF de la copia del título de propiedad (máx. 5MB)</p>
-                  </div>
-                </div>
 
               {/* Terms and Conditions */}
               <div className="space-y-4">
