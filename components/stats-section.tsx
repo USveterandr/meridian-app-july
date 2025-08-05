@@ -34,7 +34,7 @@ export function StatsSection() {
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-slate-900 mb-4">Trusted by Thousands</h2>
           <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-            Our track record speaks for itself. We've helped thousands find their perfect luxury home.
+            Our track record speaks for itself. We&apos;ve helped thousands find their perfect luxury home.
           </p>
         </div>
 

@@ -64,17 +64,23 @@ export function HeroSection() {
             <Button
               size="lg"
               className="bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white px-8 py-4 text-lg shadow-lg hover:shadow-xl transition-all"
+              asChild
             >
-              <Camera className="h-5 w-5 mr-2" />
-              Publicar Propiedad
+              <a href="/sell">
+                <Camera className="h-5 w-5 mr-2" />
+                Publicar Propiedad
+              </a>
             </Button>
             <Button
               size="lg"
               variant="outline"
               className="border-white text-white hover:bg-white hover:text-slate-900 px-8 py-4 text-lg backdrop-blur-md"
+              asChild
             >
-              <Search className="h-5 w-5 mr-2" />
-              Buscar Inversiones
+              <a href="/properties">
+                <Search className="h-5 w-5 mr-2" />
+                Buscar Inversiones
+              </a>
             </Button>
           </div>
 

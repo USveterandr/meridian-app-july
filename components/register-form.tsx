@@ -10,28 +10,34 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox"
 import { UserPlus, Upload, Eye, EyeOff, FileText, CheckCircle, X, Loader2 } from "lucide-react"
 
+// Helper function to sanitize input
+function sanitizeInput(input: string): string {
+  return encodeURIComponent(input.trim())
+}
+
 // Helper function to send welcome email
 async function sendWelcomeEmail(email: string, firstName: string) {
   try {
-    // This would be your actual API call to send email
     const response = await fetch("/api/send-welcome-email", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "X-Requested-With": "XMLHttpRequest",
       },
       body: JSON.stringify({
-        email,
-        firstName,
+        email: sanitizeInput(email),
+        firstName: sanitizeInput(firstName),
         timestamp: new Date().toISOString(),
       }),
     })
 
     if (response.ok) {
+      // Log success without exposing user data
       console.log("Welcome email sent successfully")
     }
   } catch (error) {
-    console.error("Error sending welcome email:", error)
-    // Don't block the user flow if email fails
+    // Log error without exposing sensitive data
+    console.error("Error sending welcome email")
   }
 }
 
@@ -83,7 +89,11 @@ export function RegisterForm() {
       setIsCedulaValidating(true);
       setCedulaValidationStatus('validating');
       try {
-        const response = await fetch(`/api/authenticate-cedula?cedula=${cedulaValue}`);
+        const response = await fetch(`/api/authenticate-cedula?cedula=${encodeURIComponent(cedulaValue)}`, {
+          headers: {
+            "X-Requested-With": "XMLHttpRequest",
+          },
+        });
         const data = await response.json();
         if (response.ok && data.valid) {
           setCedulaValidationStatus('valid');
@@ -91,7 +101,7 @@ export function RegisterForm() {
           setCedulaValidationStatus('invalid');
         }
       } catch (error) {
-        console.error("Error validating cédula:", error);
+        console.error("Error validating cédula");
         setCedulaValidationStatus('invalid');
       } finally {
         setIsCedulaValidating(false);
@@ -217,27 +227,16 @@ export function RegisterForm() {
         submitData.append("titleCopyDocument", uploadedFiles.titleCopy)
       }
 
-      // Here you would normally send to your API
-      console.log("Form submitted successfully!", {
-        formData,
-        accountType,
-        files: uploadedFiles,
-      })
+      // Log success without exposing sensitive data
+      console.log("Form submitted successfully")
 
-      // Success - redirect to welcome page with email confirmation
-      console.log("Form submitted successfully!", {
-        formData,
-        accountType,
-        files: uploadedFiles,
-      })
-
-      // Send welcome email (simulate API call)
+      // Send welcome email
       await sendWelcomeEmail(formData.email, formData.firstName)
 
-      // Redirect to welcome page instead of showing alert and resetting
+      // Redirect to welcome page with sanitized parameters
       window.location.href = `/welcome?email=${encodeURIComponent(formData.email)}&name=${encodeURIComponent(formData.firstName)}`
     } catch (error) {
-      console.error("Error creating account:", error)
+      console.error("Error creating account")
       alert("Hubo un error al crear tu cuenta. Por favor intenta nuevamente.")
     } finally {
       setIsSubmitting(false)
@@ -597,11 +596,10 @@ export function RegisterForm() {
                     </div>
                   </div>
                 </div>
-              </div>
 
-                  {/* Title Copy Document Upload */}
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">Copia del Título de Propiedad *</label>
+                {/* Title Copy Document Upload */}
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">Copia del Título de Propiedad *</label>
 
                     <input
                       id="titlecopy-upload"
@@ -644,9 +642,9 @@ export function RegisterForm() {
                         </button>
                       </div>
                     )}
-                    <p className="text-xs text-slate-500 mt-1">JPG, PNG o PDF de la copia del título de propiedad (máx. 5MB)</p>
-                  </div>
+                  <p className="text-xs text-slate-500 mt-1">JPG, PNG o PDF de la copia del título de propiedad (máx. 5MB)</p>
                 </div>
+              </div>
 
               {/* Terms and Conditions */}
               <div className="space-y-4">

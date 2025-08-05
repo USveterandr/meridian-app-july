@@ -1,14 +1,61 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { env } from '@/lib/env'
 import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
+
+// Environment configuration
+const env = {
+  EMAIL_REGION: process.env.EMAIL_REGION || 'us-east-1',
+  EMAIL_FROM: process.env.EMAIL_FROM || 'no-reply@investwithmeridian.com',
+  NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+};
+
+// Input sanitization function
+function sanitizeInput(input: string): string {
+  if (typeof input !== 'string') return '';
+  return input.replace(/[<>"'&]/g, (match) => {
+    const entities: { [key: string]: string } = {
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#x27;',
+      '&': '&amp;'
+    };
+    return entities[match] || match;
+  }).trim();
+}
+
+// Email validation function
+function isValidEmail(email: string): boolean {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email) && email.length <= 254;
+}
 
 export async function POST(request: NextRequest) {
   try {
+    // Check for CSRF protection header
+    const requestedWith = request.headers.get('X-Requested-With');
+    if (requestedWith !== 'XMLHttpRequest') {
+      return NextResponse.json({ error: "Invalid request" }, { status: 403 });
+    }
+
     const { email, firstName, timestamp } = await request.json()
 
     // Validate required fields
     if (!email || !firstName) {
       return NextResponse.json({ error: "Email and firstName are required" }, { status: 400 })
+    }
+
+    // Validate email format
+    if (!isValidEmail(email)) {
+      return NextResponse.json({ error: "Invalid email format" }, { status: 400 })
+    }
+
+    // Sanitize inputs
+    const sanitizedEmail = email.trim().toLowerCase();
+    const sanitizedFirstName = sanitizeInput(firstName);
+
+    // Validate sanitized inputs
+    if (!sanitizedEmail || !sanitizedFirstName || sanitizedFirstName.length > 50) {
+      return NextResponse.json({ error: "Invalid input data" }, { status: 400 })
     }
 
     // Initialize AWS SES v3 Client
@@ -18,7 +65,7 @@ export async function POST(request: NextRequest) {
 
     const params = {
       Destination: {
-        ToAddresses: [email],
+        ToAddresses: [sanitizedEmail],
       },
       Message: {
         Body: {
@@ -29,7 +76,7 @@ export async function POST(request: NextRequest) {
                 <body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
                   <div style="text-align: center; margin-bottom: 30px;">
                     <h1 style="color: #d97706;">¡Bienvenido a Meridian!</h1>
-                    <p style="font-size: 18px; color: #64748b;">Hola ${firstName}, tu cuenta ha sido creada exitosamente</p>
+                    <p style="font-size: 18px; color: #64748b;">Hola ${sanitizedFirstName}, tu cuenta ha sido creada exitosamente</p>
                   </div>
                   
                   <div style="background: #f8fafc; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
@@ -82,12 +129,11 @@ export async function POST(request: NextRequest) {
         messageId: result.MessageId
       });
     } catch (error) {
-      // Log detailed error information
-      console.error("AWS SES Error Details:", {
+      // Log error without exposing sensitive data
+      console.error("AWS SES Error:", {
         code: error.code,
         statusCode: error.statusCode,
         time: new Date().toISOString(),
-        message: error.message,
         requestId: error.requestId,
         retryable: error.retryable
       });
