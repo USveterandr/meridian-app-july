@@ -1,0 +1,425 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// User Management
+model User {
+  id                String   @id @default(cuid())
+  email             String   @unique
+  name              String?
+  password          String
+  role              UserRole @default(INVESTOR)
+  subscriptionTier  SubscriptionTier @default(INITIAL)
+  subscriptionEnd   DateTime?
+  stripeCustomerId String?
+  stripePriceId     String?
+  isVerified        Boolean  @default(false)
+  verificationLevel VerificationLevel @default(BASIC)
+  cedula            String?  @unique // Dominican Republic ID
+  phone             String?
+  country           String   @default("DO")
+  language          String   @default("en")
+  avatar            String?
+  bio               String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Relations
+  properties        Property[]
+  investments       Investment[]
+  documents         Document[]
+  verificationDocs  VerificationDocument[]
+  payments          Payment[]
+  notifications     Notification[]
+  reviews           Review[]
+
+  @@map("users")
+}
+
+// Property Management
+model Property {
+  id               String   @id @default(cuid())
+  title            String
+  description      String
+  type             PropertyType
+  status           PropertyStatus @default(AVAILABLE)
+  price            Float
+  currency         String   @default("USD")
+  address          String
+  city             String
+  province         String
+  country          String   @default("DO")
+  zipCode          String?
+  coordinates      String?  // JSON format for lat/lng
+  area             Float    // in square meters
+  bedrooms         Int?
+  bathrooms        Int?
+  yearBuilt        Int?
+  features         String?  // JSON format for property features
+  taxIncentives    String?  // JSON format for applicable tax incentives
+  images           String?  // JSON format for image URLs
+  documentUrls     String?  // JSON format for document URLs
+  videoUrl         String?
+  virtualTourUrl   String?
+  isFeatured       Boolean  @default(false)
+  isVerified       Boolean  @default(false)
+  views            Int      @default(0)
+  investorROI      Float?   // Expected return on investment
+  listingType      ListingType @default(SALE)
+  rentalPrice      Float?   // Monthly rental price if for rent
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  // Relations
+  ownerId          String
+  owner            User     @relation(fields: [ownerId], references: [id])
+  investments      Investment[]
+  reviews          Review[]
+  documents        Document[]
+
+  @@map("properties")
+}
+
+// Investment Management
+model Investment {
+  id              String   @id @default(cuid())
+  amount          Float
+  currency        String   @default("USD")
+  investmentType  InvestmentType
+  status          InvestmentStatus @default(PENDING)
+  expectedROI     Float
+  actualROI       Float?
+  startDate       DateTime
+  endDate         DateTime?
+  contractUrl     String?
+  documentUrls     String?  // JSON format for document URLs
+  notes           String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  investorId      String
+  investor        User     @relation(fields: [investorId], references: [id])
+  propertyId      String
+  property        Property @relation(fields: [propertyId], references: [id])
+  payments        Payment[]
+
+  @@map("investments")
+}
+
+// Subscription Plans
+model SubscriptionPlan {
+  id              String   @id @default(cuid())
+  name            String
+  description     String
+  tier            SubscriptionTier
+  price           Float
+  originalPrice   Float?
+  discountPercent Int?
+  currency        String   @default("USD")
+  billingCycle    BillingCycle @default(MONTHLY)
+  maxUsers        Int      // -1 for unlimited
+  maxProperties   Int      // -1 for unlimited
+  maxPhotos       Int
+  commissionRate  Float?   // Commission percentage
+  features        String?  // JSON format for feature strings
+  isActive        Boolean  @default(true)
+  isPromotional   Boolean  @default(false)
+  stripePriceId   String?
+  targetAudience  String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("subscription_plans")
+}
+
+// Additional Packages
+model AdditionalPackage {
+  id              String   @id @default(cuid())
+  name            String
+  description     String
+  price           Float
+  currency        String   @default("USD")
+  features        String?  // JSON format for features
+  isActive        Boolean  @default(true)
+  stripePriceId   String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("additional_packages")
+}
+
+// Coupons and Promotions
+model Coupon {
+  id              String   @id @default(cuid())
+  code            String   @unique
+  discountPercent Int
+  maxUses         Int
+  usedCount       Int      @default(0)
+  isActive        Boolean  @default(true)
+  expiresAt       DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("coupons")
+}
+
+// Payment Processing
+model Payment {
+  id              String   @id @default(cuid())
+  amount          Float
+  currency        String   @default("USD")
+  status          PaymentStatus @default(PENDING)
+  paymentMethod   PaymentMethod
+  stripePaymentId String?
+  stripeInvoiceId String?
+  description     String?
+  metadata        String?  // JSON format for additional data
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  userId          String?
+  user            User?    @relation(fields: [userId], references: [id])
+  investmentId    String?
+  investment      Investment? @relation(fields: [investmentId], references: [id])
+
+  @@map("payments")
+}
+
+// Document Management
+model Document {
+  id          String   @id @default(cuid())
+  name        String
+  type        DocumentType
+  url         String
+  description String?
+  isVerified  Boolean  @default(false)
+  verifiedAt  DateTime?
+  metadata    String?  // JSON format for additional data
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id])
+  propertyId  String?
+  property    Property? @relation(fields: [propertyId], references: [id])
+
+  @@map("documents")
+}
+
+// Verification Documents
+model VerificationDocument {
+  id          String   @id @default(cuid())
+  type        VerificationType
+  url         String
+  status      VerificationStatus @default(PENDING)
+  reviewedBy  String?
+  reviewedAt  DateTime?
+  rejectionReason String?
+  metadata    String?  // JSON format for additional data
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+
+  @@map("verification_documents")
+}
+
+// Reviews and Ratings
+model Review {
+  id        String   @id @default(cuid())
+  rating    Int      // 1-5 stars
+  title     String?
+  comment   String?
+  isPublic  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  propertyId String?
+  property  Property? @relation(fields: [propertyId], references: [id])
+
+  @@map("reviews")
+}
+
+// Notifications
+model Notification {
+  id        String   @id @default(cuid())
+  type      NotificationType
+  title     String
+  message   String
+  isRead    Boolean  @default(false)
+  metadata  String?  // JSON format for additional data
+  createdAt DateTime @default(now())
+
+  // Relations
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@map("notifications")
+}
+
+// Email Verification Tokens
+model EmailVerificationToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  email     String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@map("email_verification_tokens")
+}
+
+// Password Reset Tokens
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  email     String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@map("password_reset_tokens")
+}
+
+// Enums
+enum UserRole {
+  INVESTOR
+  AGENT
+  BROKER
+  DEVELOPER
+  ADMIN
+  SUPER_ADMIN
+}
+
+enum SubscriptionTier {
+  INITIAL
+  TEAM
+  COMPANY_LITE
+  UNLIMITED
+}
+
+enum VerificationLevel {
+  BASIC
+  ADVANCED
+  BIOMETRIC
+  AI_VERIFIED
+}
+
+enum PropertyType {
+  CONDO
+  VILLA
+  HOUSE
+  COMMERCIAL
+  INDUSTRIAL
+  LAND
+  HOTEL
+  MIXED_USE
+}
+
+enum PropertyStatus {
+  AVAILABLE
+  PENDING
+  SOLD
+  RENTED
+  OFF_MARKET
+}
+
+enum ListingType {
+  SALE
+  RENT
+  LEASE
+}
+
+enum InvestmentType {
+  DIRECT_OWNERSHIP
+  FRACTIONAL
+  REIT
+  CROWDFUNDED
+}
+
+enum InvestmentStatus {
+  PENDING
+  ACTIVE
+  COMPLETED
+  CANCELLED
+  REFUNDED
+}
+
+enum BillingCycle {
+  MONTHLY
+  QUARTERLY
+  ANNUAL
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+  CANCELLED
+}
+
+enum PaymentMethod {
+  STRIPE
+  BANK_TRANSFER
+  CASH
+  CRYPTO
+}
+
+enum DocumentType {
+  PROPERTY_DEED
+  TITLE_INSURANCE
+  APPRAISAL
+  INSPECTION_REPORT
+  TAX_RECORD
+  BUILDING_PERMIT
+  FLOOR_PLAN
+  PHOTO
+  VIDEO
+  OTHER
+}
+
+enum VerificationType {
+  ID_DOCUMENT
+  PROOF_OF_ADDRESS
+  BANK_STATEMENT
+  TAX_RETURN
+  BUSINESS_LICENSE
+  PASSPORT
+  DR_CEDULA
+  BIOMETRIC_DATA
+}
+
+enum VerificationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  EXPIRED
+}
+
+enum NotificationType {
+  INVESTMENT_OPPORTUNITY
+  PAYMENT_RECEIVED
+  DOCUMENT_VERIFIED
+  PROPERTY_AVAILABLE
+  MARKET_UPDATE
+  SYSTEM_ALERT
+  ACCOUNT_UPDATE
+}

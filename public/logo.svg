@@ -1,0 +1,16 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="100" cy="100" r="90" fill="#1e40af" stroke="#fbbf24" stroke-width="4"/>
+  
+  <!-- M letter -->
+  <path d="M 60 60 L 60 140 L 80 140 L 80 90 L 100 120 L 120 90 L 120 140 L 140 140 L 140 60 L 120 60 L 100 90 L 80 60 Z" 
+        fill="#fbbf24" 
+        stroke="#fbbf24" 
+        stroke-width="2"/>
+  
+  <!-- Small building icon on top right -->
+  <rect x="120" y="50" width="25" height="20" fill="#fbbf24" stroke="#1e40af" stroke-width="1"/>
+  <polygon points="120,50 132.5,40 145,50" fill="#fbbf24"/>
+  <rect x="125" y="55" width="4" height="10" fill="#1e40af"/>
+  <rect x="136" y="55" width="4" height="10" fill="#1e40af"/>
+</svg>
