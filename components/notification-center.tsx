@@ -16,9 +16,9 @@ import {
   Star,
   Clock,
   Sparkles,
-  Fire
+  Flame
 } from 'lucide-react'
-import { useGamification } from '@/lib/gamification-context'
+
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -96,7 +96,7 @@ const SAMPLE_NOTIFICATIONS: Notification[] = [
     type: 'investment_opportunity',
     title: '🚨 Oportunidad Caliente',
     message: 'Nueva villa en Cap Cana con 24% ROI disponible',
-    icon: <Fire className="h-5 w-5 text-red-400" />,
+    icon: <Flame className="h-5 w-5 text-red-400" />,
     timestamp: new Date(Date.now() - 1000 * 60 * 5),
     read: false,
     urgency: 'high',
@@ -152,7 +152,7 @@ const SAMPLE_NOTIFICATIONS: Notification[] = [
 ]
 
 export function NotificationCenter() {
-  const { state, completeExploration } = useGamification()
+  // const { state, completeExploration } = useGamification() // Temporarily disabled
   const [notifications, setNotifications] = useState<Notification[]>(SAMPLE_NOTIFICATIONS)
   const [isOpen, setIsOpen] = useState(false)
   const [unreadCount, setUnreadCount] = useState(2)
@@ -248,7 +248,7 @@ export function NotificationCenter() {
       action: {
         label: 'Explorar',
         onClick: () => {
-          completeExploration()
+          // completeExploration() // Temporarily disabled
           toast(`¡+25 puntos! Explorando ${property}`, { icon: '🎯' })
         }
       }
@@ -468,12 +468,12 @@ export function NotificationCenter() {
                   <Target className="h-4 w-4" />
                   <span>Puntos Totales:</span>
                   <span className="font-bold text-amber-600">
-                    <CountUp end={state.totalPoints} duration={1} />
+                    <CountUp end={0} duration={1} />
                   </span>
                 </div>
                 
                 <Badge className="bg-purple-100 text-purple-700">
-                  Nivel {state.level}
+                  Nivel 1
                 </Badge>
               </div>
             </div>

@@ -1,0 +1,43 @@
+name = "meridian-real-estate"
+compatibility_date = "2024-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+[env.production]
+name = "meridian-real-estate-prod"
+routes = [
+  { pattern = "your-domain.com/*", zone_name = "your-domain.com" }
+]
+
+[env.staging]
+name = "meridian-real-estate-staging"
+
+# Environment variables for Cloudflare Workers
+[vars]
+NODE_ENV = "production"
+
+# Secrets (set via wrangler secret put)
+# AWS_ACCESS_KEY_ID
+# AWS_SECRET_ACCESS_KEY
+# EMAIL_REGION
+# EMAIL_FROM
+# GOOGLE_AI_API_KEY
+
+# Build configuration
+[build]
+command = "npm run build"
+
+# Asset handling
+[site]
+bucket = ".next/static"
+
+# Compatibility settings for Node.js APIs
+compatibility_flags = ["nodejs_compat", "streams_enable_constructors"]
+
+# Memory and CPU limits
+limits = { cpu_ms = 50 }
+
+# KV bindings for caching (optional)
+# [[kv_namespaces]]
+# binding = "CACHE"
+# id = "your-kv-namespace-id"
+# preview_id = "your-preview-kv-namespace-id"

@@ -1,19 +1,81 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
+import withPWA from 'next-pwa';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+const withPWAConfig = withPWA({
+  dest: 'public',
+  register: true,
+  skipWaiting: true,
+  runtimeCaching: [
+    {
+      urlPattern: /^https:\/\/fonts\.(googleapis|gstatic)\.com\/.*/i,
+      handler: 'CacheFirst',
+      options: {
+        cacheName: 'google-fonts',
+        expiration: {
+          maxEntries: 4,
+          maxAgeSeconds: 365 * 24 * 60 * 60, // 365 days
+        },
+      },
+    },
+    {
+      urlPattern: /^https:\/\/use\.fontawesome\.com\/.*/i,
+      handler: 'CacheFirst',
+      options: {
+        cacheName: 'fontawesome',
+        expiration: {
+          maxEntries: 1,
+          maxAgeSeconds: 365 * 24 * 60 * 60, // 365 days
+        },
+      },
+    },
+    {
+      urlPattern: /\/api\/.*/i,
+      handler: 'NetworkFirst',
+      options: {
+        cacheName: 'apis',
+        networkTimeoutSeconds: 10,
+        expiration: {
+          maxEntries: 16,
+          maxAgeSeconds: 24 * 60 * 60, // 24 hours
+        },
+      },
+    },
+    {
+      urlPattern: /.*/i,
+      handler: 'NetworkFirst',
+      options: {
+        cacheName: 'others',
+        networkTimeoutSeconds: 10,
+        expiration: {
+          maxEntries: 32,
+          maxAgeSeconds: 24 * 60 * 60, // 24 hours
+        },
+      },
+    },
+  ],
+});
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Enable production optimizations
   productionBrowserSourceMaps: false,
   
-  // Performance optimizations
+  // Edge runtime and mobile optimizations
   experimental: {
     optimizeCss: true,
-    optimizePackageImports: ['lucide-react', '@radix-ui/react-dropdown-menu']
+    optimizePackageImports: ['lucide-react', '@radix-ui/react-dropdown-menu'],
+    esmExternals: true,
+    forceSwcTransforms: true,
   },
+  
+  // External packages for server components
+  serverExternalPackages: ['@aws-sdk/client-ses'],
+  
+
 
   // Compiler optimizations
   compiler: {
@@ -148,4 +210,4 @@ const nextConfig = {
   output: 'standalone',
 }
 
-export default nextConfig
+export default withPWAConfig(nextConfig)

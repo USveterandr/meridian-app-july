@@ -4,12 +4,30 @@
   "private": true,
   "scripts": {
     "build": "next build",
+    "build:static": "next build && next export",
+    "build:mobile": "next build && next export && npx cap sync",
     "dev": "next dev",
     "lint": "next lint",
-    "start": "next start"
+    "start": "next start",
+    "deploy:cloudflare": "npm run build:static && wrangler pages deploy out",
+    "mobile:ios": "npm run build:mobile && npx cap open ios",
+    "mobile:android": "npm run build:mobile && npx cap open android",
+    "mobile:sync": "npx cap sync",
+    "mobile:run:ios": "npx cap run ios",
+    "mobile:run:android": "npx cap run android",
+    "mobile:live-reload": "npx cap run ios --livereload --external",
+    "audit:security": "npm audit && npm run lint",
+    "optimize": "npm run build && npm run audit:security"
   },
   "dependencies": {
     "@aws-sdk/client-ses": "^3.699.0",
+    "@capacitor/app": "^7.0.2",
+    "@capacitor/device": "^7.0.2",
+    "@capacitor/haptics": "^7.0.2",
+    "@capacitor/keyboard": "^7.0.2",
+    "@capacitor/network": "^7.0.2",
+    "@capacitor/splash-screen": "^7.0.2",
+    "@capacitor/status-bar": "^7.0.2",
     "@google/generative-ai": "^0.24.1",
     "@heroicons/react": "^2.2.0",
     "@hookform/resolvers": "^3.9.1",
@@ -27,7 +45,7 @@
     "@radix-ui/react-menubar": "1.1.4",
     "@radix-ui/react-navigation-menu": "1.2.3",
     "@radix-ui/react-popover": "1.1.4",
-    "@radix-ui/react-progress": "1.1.1",
+    "@radix-ui/react-progress": "^1.1.1",
     "@radix-ui/react-radio-group": "1.2.2",
     "@radix-ui/react-scroll-area": "1.2.2",
     "@radix-ui/react-select": "2.1.4",
@@ -78,6 +96,11 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@capacitor/android": "^7.4.3",
+    "@capacitor/cli": "^7.4.3",
+    "@capacitor/core": "^7.4.3",
+    "@capacitor/ios": "^7.4.3",
+    "@cloudflare/next-on-pages": "^1.13.14",
     "@types/node": "^20.14.5",
     "@types/react": "^18.3.23",
     "@types/react-dom": "^18.3.7",
@@ -85,9 +108,12 @@
     "critters": "^0.0.22",
     "eslint": "^9.32.0",
     "eslint-config-next": "15.4.5",
+    "next-pwa": "^5.6.0",
     "postcss": "^8.4.35",
     "tailwindcss": "^3.3.5",
     "ts-node": "^10.9.1",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "workbox-webpack-plugin": "^7.3.0",
+    "wrangler": "^4.32.0"
   }
 }
