@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Camera, Upload, X, CheckCircle, FileText } from "lucide-react"
+import Image from 'next/image';
 
 export function PropertyUploadForm() {
   const [images, setImages] = useState<File[]>([])
@@ -188,9 +189,11 @@ export function PropertyUploadForm() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                 {images.map((file, index) => (
                   <div key={index} className="relative">
-                    <img
+                    <Image
                       src={URL.createObjectURL(file) || "/placeholder.svg"}
                       alt={`Foto ${index + 1}`}
+                      width={200}
+                      height={150}
                       className="w-full h-32 object-cover rounded-lg"
                     />
                     <button

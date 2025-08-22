@@ -2,6 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import Image from 'next/image';
 
 export default function ApartmentsPage() {
   const properties = [
@@ -132,9 +133,11 @@ export default function ApartmentsPage() {
             {properties.map((property) => (
               <Card key={property.id} className="hover:shadow-xl transition-shadow overflow-hidden">
                 <div className="relative">
-                  <img
+                  <Image
                     src={property.image}
                     alt={property.title}
+                    width={400}
+                    height={250}
                     className="h-64 w-full object-cover"
                   />
                   {property.featured && (

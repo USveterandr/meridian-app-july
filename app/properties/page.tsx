@@ -1,10 +1,36 @@
-import { Header } from "@/components/header"
-import { Footer } from "@/components/footer"
-import { PropertySearch } from "@/components/property-search"
-import { PropertyGrid } from "@/components/property-grid"
-import { PropertyFilters } from "@/components/property-filters"
+// app/properties/page.tsx
+import { Header } from "@/components/header";
+import { Footer } from "@/components/footer";
+import { PropertySearch } from "@/components/property-search";
+import { PropertyGrid } from "@/components/property-grid";
+import { PropertyFilters } from "@/components/property-filters";
 
 export default function PropertiesPage() {
+  const properties = [
+    {
+      id: 1,
+      title: "Villa Oceanfront en Casa de Campo",
+      location: "La Romana",
+      price: "$3,500,000",
+      bedrooms: 5,
+      bathrooms: 6,
+      area: "850 m²",
+      description: "Exclusiva villa frente al mar con acceso privado a la playa, piscina infinita y vistas panorámicas al Caribe.",
+      image: "/placeholder.jpg"
+    },
+    {
+      id: 2,
+      title: "Mansión Moderna en Piantini",
+      location: "Santo Domingo",
+      price: "$2,800,000",
+      bedrooms: 6,
+      bathrooms: 7,
+      area: "1,200 m²",
+      description: "Lujosa mansión en uno de los barrios más exclusivos de Santo Domingo, con diseño de arquitecto de renombre.",
+      image: "/placeholder.jpg"
+    }
+  ];
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
       <Header />
@@ -40,7 +66,7 @@ export default function PropertiesPage() {
               <PropertyFilters />
             </aside>
             <main className="lg:w-3/4">
-              <PropertyGrid />
+              <PropertyGrid properties={properties} />
             </main>
           </div>
         </div>
@@ -48,5 +74,5 @@ export default function PropertiesPage() {
 
       <Footer />
     </div>
-  )
+  );
 }

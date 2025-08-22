@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import Image from 'next/image';
 import Link from "next/link"
 
 export default function HotelsPage() {
@@ -86,7 +87,7 @@ export default function HotelsPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">Hoteles y Resorts</h1>
           <p className="text-xl text-slate-300 max-w-3xl mx-auto">
-            Invierta en el próspero sector turístico de República Dominicana con nuestra selección exclusiva de hoteles y resorts de lujo.
+            Invierte en el próspero sector turístico de República Dominicana con nuestra selección exclusiva de hoteles y resorts de lujo.
           </p>
         </div>
       </div>
@@ -135,9 +136,11 @@ export default function HotelsPage() {
             {properties.map((property) => (
               <Card key={property.id} className="hover:shadow-xl transition-shadow overflow-hidden">
                 <div className="relative">
-                  <img
+                  <Image
                     src={property.image}
                     alt={property.title}
+                    width={400}
+                    height={250}
                     className="h-64 w-full object-cover"
                   />
                   {property.featured && (

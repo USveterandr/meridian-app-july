@@ -1,9 +1,13 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { Search, DollarSign, Shield, Camera } from "lucide-react"
+import { Search, DollarSign, Shield, Camera, Play, Heart, Share2, TrendingUp } from "lucide-react"
 import Image from "next/image"
-
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
+import { useIntersectionObserver } from "react-intersection-observer"
+import { useSpring, animated } from "react-spring"
+import CountUp from "react-countup"
+import { useState, useEffect } from "react"
 
 export function HeroSection() {
   return (

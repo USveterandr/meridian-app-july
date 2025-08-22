@@ -1,7 +1,10 @@
-import type { Metadata } from 'next'
-import { Providers } from '@/components/providers'
-import { AiChat } from '@/components/ai-chat'
-import './globals.css'
+import type { Metadata } from 'next';
+import { Providers } from '@/components/providers';
+import './globals.css';
+import { Inter } from 'next/font/google';
+import React from 'react';
+
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Meridian República Dominicana - Inversiones Inmobiliarias de Lujo',
@@ -10,23 +13,17 @@ export const metadata: Metadata = {
 }
 
 export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+  children = null,
+}: {
+  children: React.ReactNode | null;
+}) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body>
-        <Providers
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
+    <html lang="en">
+      <body className={inter.className}>
+        <Providers>
           {children}
-          <AiChat />
         </Providers>
       </body>
     </html>
-  )
+  );
 }

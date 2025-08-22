@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
+import Image from 'next/image';
 
 export default function BlogPage() {
   const blogPosts = [
@@ -101,8 +102,10 @@ export default function BlogPage() {
                     <Card key={post.id} className="hover:shadow-lg transition-shadow overflow-hidden">
                       <div className="md:flex">
                         <div className="md:shrink-0">
-                          <img
+                          <Image
                             className="h-48 w-full object-cover md:h-full md:w-48"
+                            width={192}
+                            height={144}
                             src={post.image}
                             alt={post.title}
                           />

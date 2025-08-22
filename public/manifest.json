@@ -1,0 +1,188 @@
+{
+  "name": "Meridian República Dominicana - Inversiones Inmobiliarias",
+  "short_name": "Meridian RD",
+  "description": "La app #1 para inversiones inmobiliarias de lujo en República Dominicana. TikTok inmobiliario con gamificación y ROI garantizado.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#f59e0b",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "es-DO",
+  "dir": "ltr",
+  "categories": ["business", "finance", "real-estate"],
+  "screenshots": [
+    {
+      "src": "/images/screenshot-mobile-1.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "platform": "narrow",
+      "label": "Explorar propiedades estilo TikTok"
+    },
+    {
+      "src": "/images/screenshot-mobile-2.png", 
+      "sizes": "390x844",
+      "type": "image/png",
+      "platform": "narrow",
+      "label": "Calculadora gamificada de ROI"
+    },
+    {
+      "src": "/images/screenshot-tablet-1.png",
+      "sizes": "768x1024",
+      "type": "image/png", 
+      "platform": "wide",
+      "label": "Dashboard completo de inversiones"
+    }
+  ],
+  "icons": [
+    {
+      "src": "/images/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/images/icon-96x96.png", 
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/images/icon-128x128.png",
+      "sizes": "128x128", 
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/images/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/images/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png", 
+      "purpose": "maskable"
+    },
+    {
+      "src": "/images/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/images/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/images/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Explorar Propiedades",
+      "short_name": "Explorar",
+      "description": "Descubre propiedades con swipe TikTok-style",
+      "url": "/explore",
+      "icons": [
+        {
+          "src": "/images/shortcut-explore.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Calculadora ROI",
+      "short_name": "Calcular",
+      "description": "Calcula rentabilidad de inversiones",
+      "url": "/calculator", 
+      "icons": [
+        {
+          "src": "/images/shortcut-calculator.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Mi Perfil",
+      "short_name": "Perfil",
+      "description": "Ver logros y progreso gamificado",
+      "url": "/profile",
+      "icons": [
+        {
+          "src": "/images/shortcut-profile.png", 
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Propiedades Favoritas",
+      "short_name": "Favoritos",
+      "description": "Mis propiedades guardadas",
+      "url": "/favorites",
+      "icons": [
+        {
+          "src": "/images/shortcut-favorites.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "share_target": {
+    "action": "/share",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text", 
+      "url": "url",
+      "files": [
+        {
+          "name": "images",
+          "accept": ["image/jpeg", "image/png", "image/webp", "image/gif"]
+        }
+      ]
+    }
+  },
+  "protocol_handlers": [
+    {
+      "protocol": "web+meridian",
+      "url": "/property?id=%s"
+    }
+  ],
+  "related_applications": [
+    {
+      "platform": "play",
+      "url": "https://play.google.com/store/apps/details?id=com.meridian.rd",
+      "id": "com.meridian.rd"
+    },
+    {
+      "platform": "itunes",
+      "url": "https://apps.apple.com/app/meridian-rd/id123456789"
+    }
+  ],
+  "prefer_related_applications": false,
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "launch_handler": {
+    "client_mode": ["navigate-existing", "auto"]
+  },
+  "handle_links": "preferred",
+  "file_handlers": [
+    {
+      "action": "/import",
+      "accept": {
+        "application/pdf": [".pdf"],
+        "image/*": [".jpg", ".jpeg", ".png", ".webp"]
+      },
+      "launch_type": "single-client"
+    }
+  ]
+}
