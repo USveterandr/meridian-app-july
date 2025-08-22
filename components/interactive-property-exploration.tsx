@@ -11,7 +11,7 @@ import {
   Home, 
   Smartphone,
   Monitor,
-  VrIcon,
+  Glasses,
   Maximize2,
   Share2,
   Heart,
@@ -76,7 +76,7 @@ const EXPLORATION_MODES: ExplorationMode[] = [
   {
     id: 'vr',
     name: 'Realidad Virtual',
-    icon: <VrIcon className="h-6 w-6" />,
+    icon: <Glasses className="h-6 w-6" />,
     description: 'Experiencia inmersiva completa en VR',
     comingSoon: true
   },

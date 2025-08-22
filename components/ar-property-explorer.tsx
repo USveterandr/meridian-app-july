@@ -20,7 +20,8 @@ import {
   Target,
   Eye,
   Settings,
-  Compass
+  Compass,
+  Heart
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'

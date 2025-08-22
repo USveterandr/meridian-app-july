@@ -6,7 +6,7 @@ import {
   Eye, 
   Camera, 
   Monitor, 
-  VrIcon,
+  Glasses,
   Play,
   Sparkles,
   Zap,
@@ -100,7 +100,7 @@ export function PropertyExplorationTrigger({ className = '' }: PropertyExplorati
                 whileHover={{ scale: 1.05 }}
                 transition={{ type: "spring", stiffness: 300 }}
               >
-                <VrIcon className="h-8 w-8 text-purple-400 mx-auto mb-2" />
+                <Glasses className="h-8 w-8 text-purple-400 mx-auto mb-2" />
                 <h4 className="text-white font-semibold text-sm">Experiencia VR</h4>
                 <p className="text-slate-400 text-xs">Inmersión total (próximamente)</p>
               </motion.div>
