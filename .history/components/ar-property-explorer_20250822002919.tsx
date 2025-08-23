@@ -429,7 +429,6 @@ export function ARPropertyExplorer({ isOpen, onClose, userLocation }: ARProperty
                 variant="ghost"
                 size="sm"
                 className="text-white hover:bg-white/20"
-                aria-label="Ver ubicación en mapa"
               >
                 <MapPin className="h-5 w-5" />
               </Button>
@@ -460,7 +459,6 @@ export function ARPropertyExplorer({ isOpen, onClose, userLocation }: ARProperty
                 variant="ghost"
                 size="sm"
                 className="text-white hover:bg-white/20"
-                aria-label="Compartir vista AR"
               >
                 <Share2 className="h-5 w-5" />
               </Button>
@@ -511,7 +509,6 @@ export function ARPropertyExplorer({ isOpen, onClose, userLocation }: ARProperty
                         maxDistance: parseInt(e.target.value)
                       }))}
                       className="w-full"
-                      aria-label="Distancia máxima en metros"
                     />
                   </div>
 
@@ -532,7 +529,6 @@ export function ARPropertyExplorer({ isOpen, onClose, userLocation }: ARProperty
                           minPrice: parseInt(e.target.value)
                         }))}
                         className="w-full"
-                        aria-label="Precio mínimo"
                       />
                       <div className="flex justify-between text-white text-xs">
                         <span>${filters.minPrice.toLocaleString()}</span>

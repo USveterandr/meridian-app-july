@@ -11,7 +11,7 @@ import {
   Home, 
   Smartphone,
   Monitor,
-  Glasses, // ✅ Replaced VrIcon for Cloudflare deployment - ensuring latest commit
+  Glasses,
   Maximize2,
   Share2,
   Heart,
@@ -76,7 +76,7 @@ const EXPLORATION_MODES: ExplorationMode[] = [
   {
     id: 'vr',
     name: 'Realidad Virtual',
-    icon: <Glasses className="h-6 w-6" />,
+    icon: <VrIcon className="h-6 w-6" />,
     description: 'Experiencia inmersiva completa en VR',
     comingSoon: true
   },
@@ -409,7 +409,6 @@ export function InteractivePropertyExploration({ isOpen, onClose }: InteractiveP
                       value={filters.type}
                       onChange={(e) => setFilters(prev => ({ ...prev, type: e.target.value }))}
                       className="bg-slate-700 border-slate-600 text-white rounded px-3 py-1 text-sm"
-                      aria-label="Filtrar por tipo de propiedad"
                     >
                       <option value="all">Todos los tipos</option>
                       <option value="Villa">Villa</option>
@@ -421,7 +420,6 @@ export function InteractivePropertyExploration({ isOpen, onClose }: InteractiveP
                       value={filters.status}
                       onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value }))}
                       className="bg-slate-700 border-slate-600 text-white rounded px-3 py-1 text-sm"
-                      aria-label="Filtrar por estado de propiedad"
                     >
                       <option value="all">Todos los estados</option>
                       <option value="available">Disponible</option>
@@ -458,12 +456,7 @@ export function InteractivePropertyExploration({ isOpen, onClose }: InteractiveP
                             </Badge>
                           </div>
                           <div className="absolute top-2 right-2">
-                            <Button 
-                              size="sm" 
-                              variant="ghost" 
-                              className="text-white hover:bg-white/20"
-                              aria-label={`Add ${property.title} to favorites`}
-                            >
+                            <Button size="sm" variant="ghost" className="text-white hover:bg-white/20">
                               <Heart className="h-4 w-4" />
                             </Button>
                           </div>

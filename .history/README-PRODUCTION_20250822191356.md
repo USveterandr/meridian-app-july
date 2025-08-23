@@ -1,18 +1,18 @@
 # Meridian Real Estate Platform - Production Deployment Guide
 
-# 🏖️ Meridian República Dominicana
+<div align=\"center\">
+  <h1>🏖️ Meridian República Dominicana</h1>
+  <p><strong>The #1 Luxury Real Estate Investment Platform</strong></p>
+  <p>TikTok-style property browsing with gamified ROI calculations</p>
+  
+  [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/your-repo/meridian-app)
+  [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/your-repo/meridian-app)
+</div>
 
-**The #1 Luxury Real Estate Investment Platform**
-
-TikTok-style property browsing with gamified ROI calculations
-
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/your-repo/meridian-app)
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/your-repo/meridian-app)
 
 ## 🚀 Quick Start
 
 ### Web Deployment (Cloudflare Workers)
-
 ```bash
 # Clone and setup
 git clone https://github.com/your-repo/meridian-app.git
@@ -24,7 +24,6 @@ npm install
 ```
 
 ### Mobile App Deployment
-
 ```bash
 # Build for mobile app stores
 ./deploy.sh mobile
@@ -48,25 +47,25 @@ npm install
 
 ```mermaid
 graph TB
-    subgraph "Frontend"
+    subgraph \"Frontend\"
         A[Next.js 15 + React 18]
         B[Tailwind CSS + Radix UI]
         C[PWA + Service Worker]
     end
     
-    subgraph "Mobile"
+    subgraph \"Mobile\"
         D[Capacitor]
         E[iOS App]
         F[Android App]
     end
     
-    subgraph "Backend"
+    subgraph \"Backend\"
         G[Cloudflare Workers]
         H[Edge Runtime]
         I[API Routes]
     end
     
-    subgraph "Services"
+    subgraph \"Services\"
         J[AWS SES]
         K[Google AI]
         L[Government APIs]
@@ -84,20 +83,17 @@ graph TB
 ## 🛠️ Technology Stack
 
 ### Core Framework
-
 - **Next.js 15** - App Router with Server Components
 - **React 18** - Component-based UI with concurrent features
 - **TypeScript** - Type-safe development
 - **Tailwind CSS** - Utility-first styling
 
 ### Mobile & PWA
-
 - **Capacitor** - Cross-platform mobile development
 - **PWA** - Progressive Web App capabilities
 - **Service Workers** - Offline functionality and caching
 
 ### Deployment & Infrastructure
-
 - **Cloudflare Workers** - Edge computing platform
 - **Vercel** - Alternative deployment option
 - **AWS SES** - Transactional email service
@@ -106,13 +102,11 @@ graph TB
 ## 📋 Prerequisites
 
 ### Development Environment
-
 - **Node.js** 18+ ([Download](https://nodejs.org/))
 - **npm** 9+ (comes with Node.js)
 - **Git** ([Download](https://git-scm.com/))
 
 ### Mobile Development (Optional)
-
 - **iOS Development**:
   - macOS 12+
   - Xcode 14+
@@ -126,7 +120,6 @@ graph TB
   - Google Play Console Account
 
 ### Cloud Services
-
 - **Cloudflare Account** ([Sign up](https://dash.cloudflare.com/sign-up))
 - **AWS Account** for SES ([Sign up](https://aws.amazon.com/))
 - **Google Cloud Account** for AI APIs ([Sign up](https://cloud.google.com/))
@@ -134,7 +127,6 @@ graph TB
 ## ⚙️ Environment Configuration
 
 ### 1. Clone and Install
-
 ```bash
 git clone https://github.com/your-repo/meridian-app.git
 cd meridian-app
@@ -142,16 +134,13 @@ npm install
 ```
 
 ### 2. Environment Variables
-
 Create `.env.local` for development:
-
 ```bash
 cp .env.example .env.local
 # Edit .env.local with your configuration
 ```
 
 **Required Environment Variables:**
-
 ```bash
 # Application
 NEXT_PUBLIC_APP_URL=https://your-domain.com
@@ -174,10 +163,9 @@ JWT_SECRET=your_jwt_secret
 ### 3. Configure Services
 
 #### AWS SES Setup
-
 ```bash
 # Install AWS CLI
-curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "AWSCLIV2.pkg"
+curl \"https://awscli.amazonaws.com/AWSCLIV2.pkg\" -o \"AWSCLIV2.pkg\"
 sudo installer -pkg AWSCLIV2.pkg -target /
 
 # Configure AWS
@@ -189,7 +177,6 @@ aws ses verify-domain-identity --domain your-domain.com
 ```
 
 #### Google AI Setup
-
 ```bash
 # 1. Go to Google Cloud Console
 # 2. Enable Generative AI API
@@ -202,27 +189,24 @@ aws ses verify-domain-identity --domain your-domain.com
 ### Cloudflare Workers (Recommended)
 
 1. **Install Wrangler CLI**
-
 ```bash
 npm install -g wrangler
 wrangler login
 ```
 
-1. **Configure wrangler.toml**
-
+2. **Configure wrangler.toml**
 ```toml
-name = "meridian-real-estate"
-compatibility_date = "2024-01-01"
+name = \"meridian-real-estate\"
+compatibility_date = \"2024-01-01\"
 
 [env.production]
-name = "meridian-real-estate-prod"
+name = \"meridian-real-estate-prod\"
 routes = [
-  { pattern = "your-domain.com/*", zone_name = "your-domain.com" }
+  { pattern = \"your-domain.com/*\", zone_name = \"your-domain.com\" }
 ]
 ```
 
-1. **Set Secrets**
-
+3. **Set Secrets**
 ```bash
 wrangler secret put AWS_ACCESS_KEY_ID
 wrangler secret put AWS_SECRET_ACCESS_KEY
@@ -230,8 +214,7 @@ wrangler secret put GOOGLE_AI_API_KEY
 wrangler secret put SECRET_KEY
 ```
 
-1. **Deploy**
-
+4. **Deploy**
 ```bash
 ./deploy.sh web
 ```
@@ -251,26 +234,22 @@ vercel --prod
 ### iOS App Store
 
 1. **Prerequisites**
-
    - macOS with Xcode 14+
    - Apple Developer Account ($99/year)
    - App Store Connect access
 
-1. **Build iOS App**
-
+2. **Build iOS App**
 ```bash
 ./deploy.sh ios
 ```
 
-1. **Configure in Xcode**
-
+3. **Configure in Xcode**
    - Open `ios/App/App.xcworkspace`
    - Set Bundle Identifier: `com.meridian.rd`
    - Configure signing certificates
    - Set deployment target: iOS 13.0+
 
-1. **Submit to App Store**
-
+4. **Submit to App Store**
    - Archive the app in Xcode
    - Upload to App Store Connect
    - Fill in metadata (use `app-store-metadata.md`)
@@ -279,33 +258,28 @@ vercel --prod
 ### Google Play Store
 
 1. **Prerequisites**
-
    - Android Studio
    - Google Play Console Account ($25 one-time)
    - Signed APK/AAB
 
-1. **Build Android App**
-
+2. **Build Android App**
 ```bash
 ./deploy.sh android
 ```
 
-1. **Configure in Android Studio**
-
+3. **Configure in Android Studio**
    - Open `android/` directory
    - Update `applicationId` in `build.gradle`
    - Configure signing keys
    - Set minimum SDK: 24 (Android 7.0)
 
-1. **Generate Release Build**
-
+4. **Generate Release Build**
 ```bash
 cd android
 ./gradlew bundleRelease
 ```
 
-1. **Upload to Play Store**
-
+5. **Upload to Play Store**
    - Go to Google Play Console
    - Create new app
    - Upload AAB file (`android/app/build/outputs/bundle/release/`)
@@ -315,7 +289,6 @@ cd android
 ## 🔒 Security & Performance
 
 ### Security Features
-
 - ✅ HTTPS everywhere
 - ✅ Security headers (CSP, HSTS, etc.)
 - ✅ Input validation and sanitization
@@ -324,7 +297,6 @@ cd android
 - ✅ CORS configuration
 
 ### Performance Optimizations
-
 - ✅ Static site generation
 - ✅ Image optimization (WebP, AVIF)
 - ✅ Code splitting and lazy loading
@@ -333,7 +305,6 @@ cd android
 - ✅ Bundle size optimization
 
 ### Run Performance Audit
-
 ```bash
 node scripts/optimize-performance.js
 npm run lighthouse
@@ -343,7 +314,6 @@ npm audit
 ## 🧪 Testing & Quality Assurance
 
 ### Development Testing
-
 ```bash
 # Start development server
 npm run dev
@@ -359,7 +329,6 @@ npm audit
 ```
 
 ### Mobile Testing
-
 ```bash
 # iOS Simulator
 npm run mobile:run:ios
@@ -372,7 +341,6 @@ npm run mobile:live-reload
 ```
 
 ### Production Testing
-
 ```bash
 # Build and test production bundle
 npm run build
@@ -385,14 +353,12 @@ npm run build:mobile
 ## 📊 Monitoring & Analytics
 
 ### Key Metrics
-
 - **Performance**: Core Web Vitals, Page Load Times
 - **User Experience**: Bounce Rate, Session Duration
 - **Business**: Conversion Rate, User Engagement
 - **Technical**: Error Rates, API Response Times
 
 ### Monitoring Setup
-
 1. **Google Analytics 4** - User behavior tracking
 2. **Sentry** - Error monitoring and performance
 3. **Cloudflare Analytics** - CDN and security metrics
@@ -403,7 +369,6 @@ npm run build:mobile
 ### Common Issues
 
 #### Build Errors
-
 ```bash
 # Clear cache and reinstall
 rm -rf .next node_modules package-lock.json
@@ -412,7 +377,6 @@ npm run build
 ```
 
 #### Mobile Build Issues
-
 ```bash
 # Sync Capacitor
 npx cap sync
@@ -423,7 +387,6 @@ npx cap sync
 ```
 
 #### Environment Variables
-
 ```bash
 # Check environment variables
 echo $NODE_ENV
@@ -434,8 +397,7 @@ cat .env.local
 ```
 
 ### Support Channels
-
-- 📧 **Email**: <support@meridian-rd.com>
+- 📧 **Email**: support@meridian-rd.com
 - 💬 **Discord**: [Join our community](https://discord.gg/meridian)
 - 📖 **Documentation**: [Full docs](https://docs.meridian-rd.com)
 - 🐛 **Issues**: [GitHub Issues](https://github.com/your-repo/meridian-app/issues)
@@ -443,11 +405,9 @@ cat .env.local
 ## 📄 License & Legal
 
 ### License
-
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ### Compliance
-
 - ✅ GDPR compliant
 - ✅ CCPA compliant
 - ✅ App Store guidelines
@@ -455,13 +415,13 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - ✅ Accessibility standards (WCAG 2.1)
 
 ### Privacy & Terms
-
 - [Privacy Policy](https://meridian-rd.com/privacy)
 - [Terms of Service](https://meridian-rd.com/terms)
 - [Cookie Policy](https://meridian-rd.com/cookies)
 
 ---
 
-**Built with ❤️ for luxury real estate investors**
-
-© 2024 Meridian Real Estate. All rights reserved.
+<div align=\"center\">
+  <p><strong>Built with ❤️ for luxury real estate investors</strong></p>
+  <p>© 2024 Meridian Real Estate. All rights reserved.</p>
+</div>"

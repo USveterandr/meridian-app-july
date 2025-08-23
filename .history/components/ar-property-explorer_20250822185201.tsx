@@ -462,8 +462,6 @@ export function ARPropertyExplorer({ isOpen, onClose, userLocation }: ARProperty
                 className="text-white hover:bg-white/20"
                 aria-label="Compartir vista AR"
               >
-                <Share2 className="h-5 w-5" />
-              </Button>
             </div>
 
             {/* Property Counter */}

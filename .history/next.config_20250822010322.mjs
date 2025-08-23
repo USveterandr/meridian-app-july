@@ -208,6 +208,9 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: false,
   },
+
+  // Output configuration
+  output: 'standalone',
 }
 
 export default withPWAConfig(nextConfig)

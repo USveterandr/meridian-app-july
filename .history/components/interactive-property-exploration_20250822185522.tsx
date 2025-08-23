@@ -458,12 +458,7 @@ export function InteractivePropertyExploration({ isOpen, onClose }: InteractiveP
                             </Badge>
                           </div>
                           <div className="absolute top-2 right-2">
-                            <Button 
-                              size="sm" 
-                              variant="ghost" 
-                              className="text-white hover:bg-white/20"
-                              aria-label={`Add ${property.title} to favorites`}
-                            >
+                            <Button size="sm" variant="ghost" className="text-white hover:bg-white/20">
                               <Heart className="h-4 w-4" />
                             </Button>
                           </div>
