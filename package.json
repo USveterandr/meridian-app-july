@@ -19,6 +19,9 @@
     "audit:security": "npm audit && npm run lint",
     "optimize": "npm run build && npm run audit:security"
   },
+  "overrides": {
+    "@types/react": "^18.3.23"
+  },
   "dependencies": {
     "@aws-sdk/client-ses": "^3.699.0",
     "@capacitor/app": "^7.0.2",

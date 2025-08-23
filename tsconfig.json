@@ -27,7 +27,9 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": [
+        "./*"
+      ]
     }
     // Existing settings remain unchanged
     // ... (keep all existing configuration)
