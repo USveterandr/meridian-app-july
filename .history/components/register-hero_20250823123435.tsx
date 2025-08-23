@@ -1,6 +1,6 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
+// import { Button } from "@/components/ui/button"
 import { UserPlus, Shield, Globe, Zap } from "lucide-react"
 export function RegisterHero() {
   return (
@@ -18,9 +18,8 @@ export function RegisterHero() {
             Proceso de verificación en 24-72 horas.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button
-              size="lg"
-              className="bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white px-8 py-4 text-lg"
+            <button
+              className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-lg font-medium bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white px-8 py-4 h-11"
               onClick={() => {
                 const formSection = document.querySelector('form');
                 if (formSection) {
@@ -30,18 +29,14 @@ export function RegisterHero() {
             >
               <UserPlus className="h-5 w-5 mr-2" />
               Crear Cuenta Gratis
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="border-white text-white hover:bg-white hover:text-slate-900 px-8 py-4 text-lg backdrop-blur-md"
-              asChild
+            </button>
+            <a
+              href="/login"
+              className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-lg font-medium border border-white text-white hover:bg-white hover:text-slate-900 px-8 py-4 h-11 backdrop-blur-md"
             >
-              <a href="/login">
-                <Shield className="h-5 w-5 mr-2" />
-                ¿Ya tienes cuenta?
-              </a>
-            </Button>
+              <Shield className="h-5 w-5 mr-2" />
+              ¿Ya tienes cuenta?
+            </a>
           </div>
         </div>
 
