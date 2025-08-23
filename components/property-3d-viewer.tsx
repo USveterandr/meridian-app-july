@@ -145,7 +145,11 @@ const TOUR_POINTS: TourPoint[] = [
 ]
 
 // 3D House Model Component
-function HouseModel({ position = [0, 0, 0], scale = 1, rotation = [0, 0, 0] }) {
+function HouseModel({ position = [0, 0, 0], scale = 1, rotation = [0, 0, 0] }: {
+  position?: [number, number, number];
+  scale?: number;
+  rotation?: [number, number, number];
+}) {
   const meshRef = useRef<THREE.Mesh>(null!)
   const [hovered, setHovered] = useState(false)
   
