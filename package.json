@@ -19,6 +19,9 @@
     "audit:security": "npm audit && npm run lint",
     "optimize": "npm run build && npm run audit:security"
   },
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "dependencies": {
     "@aws-sdk/client-ses": "^3.699.0",
     "@capacitor/app": "^7.0.2",
