@@ -1,5 +1,7 @@
 import { redirect } from 'next/navigation';
 import DashboardClient from './dashboard-client';
+import { DashboardHeader } from '@/components/dashboard-header';
+import { WelcomeSection } from '@/components/welcome-section';
 
 // Placeholder for user authentication logic
 // In a real app, you'd get the user session from a cookie or auth library
@@ -21,9 +23,14 @@ export default async function DashboardPage() {
   const subscriptionTier = 'free'; // Default to 'free' for now
 
   return (
-    <div>
-      <h1>Welcome to your Dashboard</h1>
-      <DashboardClient user={user} subscriptionTier={subscriptionTier} />
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-800">
+      <DashboardHeader />
+      <div className="px-4 py-6">
+        <WelcomeSection />
+        <div className="mt-8">
+          <DashboardClient user={user} subscriptionTier={subscriptionTier} />
+        </div>
+      </div>
     </div>
   );
 }

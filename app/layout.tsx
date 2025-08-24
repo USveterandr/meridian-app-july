@@ -2,14 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { Providers } from '@/components/providers';
 // import { MobileOptimizations } from '@/components/mobile-optimizations';
 import './globals.css';
-import { Inter } from 'next/font/google';
 import React from 'react';
-
-const inter = Inter({ 
-  subsets: ['latin'],
-  display: 'swap',
-  preload: true
-});
 
 export const metadata: Metadata = {
   title: 'Meridian República Dominicana - Inversiones Inmobiliarias de Lujo',
@@ -75,10 +68,6 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="dns-prefetch" href="//fonts.googleapis.com" />
-        <link rel="dns-prefetch" href="//fonts.gstatic.com" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -90,7 +79,7 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/images/icon-192x192.png" />
         <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#f59e0b" />
       </head>
-      <body className={`${inter.className} safe-area-top safe-area-bottom`}>
+      <body className="font-sans safe-area-top safe-area-bottom">
         {/* <MobileOptimizations /> */}
         <Providers>
           {children}
