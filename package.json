@@ -19,9 +19,6 @@
     "audit:security": "npm audit && npm run lint",
     "optimize": "npm run build && npm run audit:security"
   },
-  "overrides": {
-    "@types/react": "^18.3.23"
-  },
   "dependencies": {
     "@aws-sdk/client-ses": "^3.699.0",
     "@capacitor/app": "^7.0.2",
@@ -75,7 +72,7 @@
     "input-otp": "1.4.1",
     "lottie-react": "^2.4.1",
     "lucide-react": "^0.454.0",
-    "next": "^15.4.5",
+    "next": "^14.0.0",
     "next-themes": "^0.4.4",
     "react": "^18.3.1",
     "react-confetti-explosion": "^3.0.3",
@@ -113,8 +110,8 @@
     "@types/three": "^0.170.0",
     "autoprefixer": "^10.4.19",
     "critters": "^0.0.22",
-    "eslint": "^9.32.0",
-    "eslint-config-next": "15.4.5",
+    "eslint": "^8.0.0",
+    "eslint-config-next": "14.0.0",
     "next-pwa": "^5.6.0",
     "postcss": "^8.4.35",
     "tailwindcss": "^3.3.5",
