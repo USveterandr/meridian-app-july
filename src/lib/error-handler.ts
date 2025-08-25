@@ -81,7 +81,7 @@ export function handleApiError(error: unknown): NextResponse {
   );
 }
 
-export function asyncHandler(fn: Function) {
+export function asyncHandler(fn: (...args: any[]) => any) {
   return async (...args: any[]) => {
     try {
       return await fn(...args);
