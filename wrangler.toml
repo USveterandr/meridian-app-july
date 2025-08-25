@@ -21,23 +21,3 @@ NODE_ENV = "production"
 # EMAIL_REGION
 # EMAIL_FROM
 # GOOGLE_AI_API_KEY
-
-# Build configuration
-[build]
-command = "npm run build"
-
-# Asset handling
-[site]
-bucket = ".next/static"
-
-# Compatibility settings for Node.js APIs
-compatibility_flags = ["nodejs_compat", "streams_enable_constructors"]
-
-# Memory and CPU limits
-limits = { cpu_ms = 50 }
-
-# KV bindings for caching (optional)
-# [[kv_namespaces]]
-# binding = "CACHE"
-# id = "your-kv-namespace-id"
-# preview_id = "your-preview-kv-namespace-id"
