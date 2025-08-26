@@ -3,8 +3,7 @@ import { createUser, getUserByEmail } from '@/lib/auth';
 import { UserRole } from '@prisma/client';
 import { z } from 'zod';
 import * as bcrypt from 'bcrypt';
-import { RateLimiter } from 'rate-limiter-flexible';
-import MemoryCache from 'memory-cache';
+import cache from 'memory-cache';
 import { EmailService } from '@/lib/email';
 import { db } from '@/lib/db';
 import crypto from 'crypto';
@@ -18,29 +17,36 @@ const registerSchema = z.object({
   role: z.nativeEnum(UserRole).optional(),
 });
 
-// Initialize rate limiter
-const rateLimiter = new RateLimiter({
-  windowMs: 60 * 1000, // 1 minute
-  max: 5, // Max 5 requests per minute
-  key: 'auth-register'
-});
+// Simple in-memory rate limiter to avoid bundling optional DB adapters
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+const RATE_LIMIT_WINDOW_MS = 60 * 1000;
+const RATE_LIMIT_MAX = 5;
 
-// Initialize cache
-const cache = new MemoryCache();
+// memory-cache default export acts as a singleton cache
 
-// Add environment variable checks
-if (!process.env.DATABASE_URL) {
-  throw new Error('DATABASE_URL environment variable is missing');
-}
-
-if (!process.env.NEXT_PUBLIC_API_URL) {
-  throw new Error('NEXT_PUBLIC_API_URL environment variable is missing');
-}
 
 export async function POST(request: NextRequest) {
   try {
-    // Add rate limiting check
-    await rateLimiter.limit(request);
+    // Environment variable checks (runtime)
+    if (!process.env.DATABASE_URL) {
+      console.warn('DATABASE_URL is not set');
+    }
+    if (!process.env.NEXT_PUBLIC_API_URL) {
+      console.warn('NEXT_PUBLIC_API_URL is not set');
+    }
+    // Basic rate limiting by IP
+    const ip = request.headers.get('cf-connecting-ip') || request.headers.get('x-forwarded-for') || '127.0.0.1';
+    const now = Date.now();
+    const rec = rateLimitMap.get(ip) ?? { count: 0, resetAt: now + RATE_LIMIT_WINDOW_MS };
+    if (now > rec.resetAt) {
+      rec.count = 0;
+      rec.resetAt = now + RATE_LIMIT_WINDOW_MS;
+    }
+    rec.count += 1;
+    rateLimitMap.set(ip, rec);
+    if (rec.count > RATE_LIMIT_MAX) {
+      return NextResponse.json({ error: 'Too many requests' }, { status: 429 });
+    }
 
     const body = await request.json();
     
@@ -99,25 +105,20 @@ export async function POST(request: NextRequest) {
       status: 200
     });
 
-    // Add caching for frequent queries
-    const cachedUser = cache.get('user:' + validatedData.email);
-    if (cachedUser) {
-      return NextResponse.json(cachedUser, { status: 200 });
-    }
-
-    // Add cache for 1 hour
-    cache.set('user:' + validatedData.email, userWithoutPassword, 3600);
+    // Optional caching (noop on serverless cold starts)
+    cache.put('user:' + validatedData.email, userWithoutPassword, 3600 * 1000);
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Validation failed', details: error.errors },
+        { error: 'Validation failed', details: error.issues },
         { status: 400 }
       );
     }
 
-    console.error('Registration error:', error.message);
+    const msg = (error as Error)?.message || 'Unknown error';
+    console.error('Registration error:', msg);
     return NextResponse.json(
-      { error: `Server error: ${error.message}` },
+      { error: `Server error: ${msg}` },
       { status: 500 }
     );
   }

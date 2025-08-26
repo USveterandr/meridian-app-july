@@ -5,11 +5,13 @@ import { auth } from '@/lib/auth';
 // GET /api/properties/[id] - Get single property
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+  const resolvedParams = await context.params;
+  const id = resolvedParams.id;
     const property = await db.property.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         owner: {
           select: {
@@ -50,7 +52,7 @@ export async function GET(
 
     // Increment view count
     await db.property.update({
-      where: { id: params.id },
+      where: { id },
       data: { views: { increment: 1 } },
     });
 
@@ -76,17 +78,19 @@ export async function GET(
 // PUT /api/properties/[id] - Update property
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth();
     if (!session?.user?.email) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+  const resolvedParams = await context.params;
+  const id = resolvedParams.id;
 
     // Check if property exists and user owns it
     const existingProperty = await db.property.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: { owner: true },
     });
 
@@ -94,7 +98,12 @@ export async function PUT(
       return NextResponse.json({ error: 'Property not found' }, { status: 404 });
     }
 
-    if (existingProperty.ownerId !== session.user.id) {
+    // Resolve current user from DB to obtain their id
+    const currentUser = await db.user.findUnique({ where: { email: session.user.email } });
+    if (!currentUser) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+    }
+    if (existingProperty.ownerId !== currentUser.id) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
@@ -102,7 +111,7 @@ export async function PUT(
     
     // Update property
     const property = await db.property.update({
-      where: { id: params.id },
+      where: { id },
       data: body,
       include: {
         owner: {
@@ -132,17 +141,19 @@ export async function PUT(
 // DELETE /api/properties/[id] - Delete property
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth();
     if (!session?.user?.email) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+  const resolvedParams = await context.params;
+  const id = resolvedParams.id;
 
     // Check if property exists and user owns it
     const existingProperty = await db.property.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: { owner: true },
     });
 
@@ -150,13 +161,17 @@ export async function DELETE(
       return NextResponse.json({ error: 'Property not found' }, { status: 404 });
     }
 
-    if (existingProperty.ownerId !== session.user.id) {
+    const currentUser = await db.user.findUnique({ where: { email: session.user.email } });
+    if (!currentUser) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+    }
+    if (existingProperty.ownerId !== currentUser.id) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
     // Delete property
     await db.property.delete({
-      where: { id: params.id },
+      where: { id },
     });
 
     return NextResponse.json({

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import stripe from '@/lib/stripe';
+import stripe, { handleWebhook as verifyStripeWebhook } from '@/lib/stripe';
+import { SubscriptionTier, NotificationType, PaymentStatus, PaymentMethod } from '@prisma/client';
 import { db } from '@/lib/db';
 
 export async function POST(request: NextRequest) {
@@ -7,7 +8,7 @@ export async function POST(request: NextRequest) {
     const payload = await request.text();
     const signature = request.headers.get('stripe-signature')!;
 
-    const event = await stripe.handleWebhook(payload, signature);
+  const event = await verifyStripeWebhook(payload, signature);
 
     // Handle the event
     switch (event.type) {
@@ -145,7 +146,7 @@ async function handleSubscriptionDeleted(subscription: any) {
   await db.user.update({
     where: { id: user.id },
     data: {
-      subscriptionTier: 'FREE',
+  subscriptionTier: SubscriptionTier.INITIAL,
       subscriptionEnd: new Date(subscription.current_period_end * 1000),
     },
   });
@@ -197,8 +198,8 @@ async function handleInvoicePaymentFailed(invoice: any) {
     data: {
       amount: invoice.amount_due / 100,
       currency: invoice.currency,
-      status: 'FAILED',
-      paymentMethod: 'STRIPE',
+  status: PaymentStatus.FAILED,
+  paymentMethod: PaymentMethod.STRIPE,
       stripeInvoiceId: invoice.id,
       description: `Failed subscription payment - ${invoice.lines.data[0].description}`,
       userId: user.id,
@@ -208,7 +209,7 @@ async function handleInvoicePaymentFailed(invoice: any) {
   // Create notification for user
   await db.notification.create({
     data: {
-      type: 'PAYMENT_FAILED',
+  type: NotificationType.SYSTEM_ALERT,
       title: 'Payment Failed',
       message: 'Your subscription payment failed. Please update your payment method.',
       userId: user.id,

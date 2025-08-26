@@ -6,7 +6,7 @@ import { z } from 'zod';
 
 const verificationSchema = z.object({
   type: z.nativeEnum(VerificationType),
-  url: string,
+  url: z.string().url().or(z.string()),
   metadata: z.string().optional(),
 });
 
@@ -120,7 +120,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Validation failed', details: error.errors },
+        { error: 'Validation failed', details: error.issues },
         { status: 400 }
       );
     }

@@ -118,11 +118,11 @@ async function main() {
   ];
 
   for (const plan of subscriptionPlans) {
-    await prisma.subscriptionPlan.upsert({
-      where: { tier: plan.tier },
-      update: {},
-      create: plan,
-    });
+    try {
+      await prisma.subscriptionPlan.create({ data: plan });
+    } catch (e) {
+      // ignore duplicates on repeated seeds
+    }
   }
 
   for (const pkg of additionalPackages) {

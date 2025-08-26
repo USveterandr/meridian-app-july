@@ -182,9 +182,12 @@ export async function POST(request: NextRequest) {
     }
 
     // Create property
+    const { images, documents, ...rest } = validatedData;
     const property = await db.property.create({
       data: {
-        ...validatedData,
+        ...rest,
+        images: images && images.length ? JSON.stringify(images) : undefined,
+        documentUrls: documents && documents.length ? JSON.stringify(documents) : undefined,
         ownerId: user.id,
       },
       include: {
@@ -206,7 +209,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Validation failed', details: error.errors },
+        { error: 'Validation failed', details: error.issues },
         { status: 400 }
       );
     }

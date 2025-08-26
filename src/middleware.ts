@@ -6,7 +6,7 @@ const rateLimitMap = new Map();
 
 export async function middleware(request: NextRequest) {
   // Rate limiting
-  const ip = request.ip ?? '127.0.0.1';
+  const ip = request.headers.get('cf-connecting-ip') || request.headers.get('x-forwarded-for') || '127.0.0.1';
   const limit = parseInt(process.env.RATE_LIMIT_MAX || '100');
   const windowMs = parseInt(process.env.RATE_LIMIT_WINDOW || '900000'); // 15 minutes
   

@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import stripe from '@/lib/stripe';
+import stripe, { cancelSubscription as cancelStripeSubscription } from '@/lib/stripe';
 import { db } from '@/lib/db';
 import { auth } from '@/lib/auth';
+import { NotificationType } from '@prisma/client';
 
 export async function POST(request: NextRequest) {
   try {
@@ -33,20 +34,20 @@ export async function POST(request: NextRequest) {
     const subscription = subscriptions.data[0];
 
     // Cancel subscription at period end
-    const canceledSubscription = await stripe.cancelSubscription(subscription.id);
+  const canceledSubscription = await cancelStripeSubscription(subscription.id);
 
     // Update user in database
     await db.user.update({
       where: { id: user.id },
       data: {
-        subscriptionEnd: new Date(canceledSubscription.current_period_end * 1000),
+        subscriptionEnd: new Date((canceledSubscription as any).current_period_end * 1000),
       },
     });
 
     // Create notification
     await db.notification.create({
       data: {
-        type: 'ACCOUNT_UPDATE',
+        type: NotificationType.ACCOUNT_UPDATE,
         title: 'Subscription Canceled',
         message: 'Your subscription has been canceled and will end at the current billing period.',
         userId: user.id,
@@ -55,7 +56,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ 
       message: 'Subscription canceled successfully',
-      endDate: new Date(canceledSubscription.current_period_end * 1000)
+  endDate: new Date((canceledSubscription as any).current_period_end * 1000)
     });
   } catch (error) {
     console.error('Error canceling subscription:', error);

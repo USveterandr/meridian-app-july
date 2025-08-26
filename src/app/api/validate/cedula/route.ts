@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
     const result = await drValidationService.validateCedula(cleanCedula);
     
     // Get additional citizen information if available
-    let citizenInfo = null;
+  let citizenInfo: { verified: boolean } | null = null;
     if (result.valid) {
       const citizenResult = await drValidationService.validateCitizen(cleanCedula);
       citizenInfo = citizenResult.valid ? { verified: true } : null;
@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Validation failed', details: error.errors },
+        { error: 'Validation failed', details: error.issues },
         { status: 400 }
       );
     }

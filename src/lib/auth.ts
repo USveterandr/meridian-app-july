@@ -1,4 +1,4 @@
-import { NextAuthOptions } from 'next-auth';
+import { getServerSession, NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { db } from '@/lib/db';
@@ -56,29 +56,34 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.role = user.role;
-        token.subscriptionTier = user.subscriptionTier;
-        token.isVerified = user.isVerified;
-        token.verificationLevel = user.verificationLevel;
+        const u = user as any;
+        (token as any).role = u.role;
+        (token as any).subscriptionTier = u.subscriptionTier;
+        (token as any).isVerified = u.isVerified;
+        (token as any).verificationLevel = u.verificationLevel;
       }
       return token;
     },
     async session({ session, token }) {
-      if (token) {
-        session.user.id = token.sub!;
-        session.user.role = token.role as UserRole;
-        session.user.subscriptionTier = token.subscriptionTier as SubscriptionTier;
-        session.user.isVerified = token.isVerified as boolean;
-        session.user.verificationLevel = token.verificationLevel as string;
+      if (token && session.user) {
+        (session.user as any).id = token.sub!;
+        (session.user as any).role = (token as any).role as UserRole;
+        (session.user as any).subscriptionTier = (token as any).subscriptionTier as SubscriptionTier;
+        (session.user as any).isVerified = (token as any).isVerified as boolean;
+        (session.user as any).verificationLevel = (token as any).verificationLevel as string;
       }
       return session;
     },
   },
   pages: {
     signIn: '/auth/signin',
-    signUp: '/auth/signup',
   },
 };
+
+// Helper to retrieve the current session (compatible with App Router route handlers)
+export async function auth() {
+  return getServerSession(authOptions);
+}
 
 export async function hashPassword(password: string): Promise<string> {
   return bcrypt.hash(password, 12);

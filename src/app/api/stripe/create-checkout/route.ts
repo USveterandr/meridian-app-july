@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import stripe from '@/lib/stripe';
+import stripe, { createStripeCustomer, createCheckoutSession } from '@/lib/stripe';
 import { db } from '@/lib/db';
 import { auth } from '@/lib/auth';
 
@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
     if (user.stripeCustomerId) {
       stripeCustomer = await stripe.customers.retrieve(user.stripeCustomerId);
     } else {
-      stripeCustomer = await stripe.createStripeCustomer(
+  stripeCustomer = await createStripeCustomer(
         user.email,
         user.name || undefined
       );
@@ -46,8 +46,8 @@ export async function POST(request: NextRequest) {
     const successUrl = `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?success=true&session_id={CHECKOUT_SESSION_ID}`;
     const cancelUrl = `${process.env.NEXT_PUBLIC_APP_URL}/pricing?canceled=true`;
 
-    const checkoutSession = await stripe.createCheckoutSession(
-      stripeCustomer.id,
+    const checkoutSession = await createCheckoutSession(
+      (stripeCustomer as any).id,
       priceId,
       successUrl,
       cancelUrl,
@@ -57,8 +57,7 @@ export async function POST(request: NextRequest) {
         userId: user.id,
       }
     );
-
-    return NextResponse.json({ sessionId: checkoutSession.id, url: checkoutSession.url });
+    return NextResponse.json({ sessionId: (checkoutSession as any).id, url: (checkoutSession as any).url });
   } catch (error) {
     console.error('Error creating checkout session:', error);
     return NextResponse.json(
