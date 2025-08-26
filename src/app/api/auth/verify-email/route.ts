@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { z } from 'zod';
 
-export const runtime = 'edge';
+// Note: This route uses Prisma which may not be fully Edge Runtime compatible
 
 const verifyEmailSchema = z.object({
   token: z.string().min(1, 'Token is required'),

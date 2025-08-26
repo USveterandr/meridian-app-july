@@ -3,7 +3,7 @@ import { getStripe, handleWebhook as verifyStripeWebhook } from '@/lib/stripe';
 import { SubscriptionTier, NotificationType, PaymentStatus, PaymentMethod } from '@prisma/client';
 import { db } from '@/lib/db';
 
-export const runtime = 'edge';
+// Note: This route uses Prisma which may not be fully Edge Runtime compatible
 
 export async function POST(request: NextRequest) {
   try {

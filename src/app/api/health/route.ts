@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { checkDatabaseHealth } from '@/lib/db';
 import { logger } from '@/lib/logger';
 
-export const runtime = 'edge';
+// Note: This route uses Prisma which may not be fully Edge Runtime compatible
 
 export async function GET() {
   try {
