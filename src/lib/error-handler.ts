@@ -81,8 +81,10 @@ export function handleApiError(error: unknown): NextResponse {
   );
 }
 
-export function asyncHandler(fn: Function) {
-  return async (...args: any[]) => {
+export function asyncHandler<TArgs extends unknown[]>(
+  fn: (...args: TArgs) => Promise<NextResponse> | NextResponse
+) {
+  return async (...args: TArgs): Promise<NextResponse> => {
     try {
       return await fn(...args);
     } catch (error) {
