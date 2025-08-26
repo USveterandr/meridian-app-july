@@ -1,9 +1,20 @@
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-07-30.basil',
-});
+let _stripe: Stripe | null = null;
 
+export function getStripe(): Stripe {
+  if (!_stripe) {
+    if (!process.env.STRIPE_SECRET_KEY) {
+      throw new Error('STRIPE_SECRET_KEY environment variable is required');
+    }
+    _stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+      apiVersion: '2025-07-30.basil',
+    });
+  }
+  return _stripe;
+}
+
+const stripe = getStripe;
 export default stripe;
 
 export const stripePlans = {
@@ -35,6 +46,7 @@ export const getStripePlanByPriceId = (priceId: string) => {
 };
 
 export const createStripeCustomer = async (email: string, name?: string) => {
+  const stripe = getStripe();
   const customer = await stripe.customers.create({
     email,
     name,
@@ -52,6 +64,7 @@ export const createCheckoutSession = async (
   cancelUrl: string,
   metadata?: Record<string, string>
 ) => {
+  const stripe = getStripe();
   const session = await stripe.checkout.sessions.create({
     customer: customerId,
     payment_method_types: ['card'],
@@ -74,6 +87,7 @@ export const createPaymentIntent = async (
   currency: string = 'usd',
   metadata?: Record<string, string>
 ) => {
+  const stripe = getStripe();
   const paymentIntent = await stripe.paymentIntents.create({
     amount: Math.round(amount * 100), // Convert to cents
     currency,
@@ -84,6 +98,7 @@ export const createPaymentIntent = async (
 
 export const handleWebhook = async (payload: string, signature: string) => {
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
+  const stripe = getStripe();
   
   try {
     const event = stripe.webhooks.constructEvent(payload, signature, webhookSecret);
@@ -95,6 +110,7 @@ export const handleWebhook = async (payload: string, signature: string) => {
 };
 
 export const cancelSubscription = async (subscriptionId: string) => {
+  const stripe = getStripe();
   const subscription = await stripe.subscriptions.update(subscriptionId, {
     cancel_at_period_end: true,
   });
@@ -107,6 +123,7 @@ export const createInvoice = async (
   description: string,
   metadata?: Record<string, string>
 ) => {
+  const stripe = getStripe();
   const invoice = await stripe.invoices.create({
     customer: customerId,
     description,

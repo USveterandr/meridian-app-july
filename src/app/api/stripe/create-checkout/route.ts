@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import stripe, { createStripeCustomer, createCheckoutSession } from '@/lib/stripe';
+import { getStripe, createStripeCustomer, createCheckoutSession } from '@/lib/stripe';
 import { db } from '@/lib/db';
 import { auth } from '@/lib/auth';
 
@@ -28,9 +28,10 @@ export async function POST(request: NextRequest) {
     // Create or get Stripe customer
     let stripeCustomer;
     if (user.stripeCustomerId) {
+      const stripe = getStripe();
       stripeCustomer = await stripe.customers.retrieve(user.stripeCustomerId);
     } else {
-  stripeCustomer = await createStripeCustomer(
+      stripeCustomer = await createStripeCustomer(
         user.email,
         user.name || undefined
       );

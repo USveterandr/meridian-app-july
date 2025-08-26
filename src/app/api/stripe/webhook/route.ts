@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import stripe, { handleWebhook as verifyStripeWebhook } from '@/lib/stripe';
+import { getStripe, handleWebhook as verifyStripeWebhook } from '@/lib/stripe';
 import { SubscriptionTier, NotificationType, PaymentStatus, PaymentMethod } from '@prisma/client';
 import { db } from '@/lib/db';
 
@@ -59,7 +59,7 @@ async function handleCheckoutSessionCompleted(session: any) {
       subscriptionTier: planId.toUpperCase(),
       stripeCustomerId: session.customer,
       stripePriceId: session.subscription ? 
-        (await stripe.subscriptions.retrieve(session.subscription)).items.data[0].price.id : 
+        (await getStripe().subscriptions.retrieve(session.subscription)).items.data[0].price.id : 
         null,
     },
   });

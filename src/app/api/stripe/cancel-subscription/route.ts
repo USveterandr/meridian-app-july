@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import stripe, { cancelSubscription as cancelStripeSubscription } from '@/lib/stripe';
+import { getStripe, cancelSubscription as cancelStripeSubscription } from '@/lib/stripe';
 import { db } from '@/lib/db';
 import { auth } from '@/lib/auth';
 import { NotificationType } from '@prisma/client';
@@ -21,6 +21,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Get user's active subscription
+    const stripe = getStripe();
     const subscriptions = await stripe.subscriptions.list({
       customer: user.stripeCustomerId,
       status: 'active',
@@ -34,9 +35,7 @@ export async function POST(request: NextRequest) {
     const subscription = subscriptions.data[0];
 
     // Cancel subscription at period end
-  const canceledSubscription = await cancelStripeSubscription(subscription.id);
-
-    // Update user in database
+    const canceledSubscription = await cancelStripeSubscription(subscription.id);    // Update user in database
     await db.user.update({
       where: { id: user.id },
       data: {
