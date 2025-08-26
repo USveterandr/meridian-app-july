@@ -4,7 +4,7 @@ import { auth } from '@/lib/auth';
 import { VerificationType, VerificationStatus } from '@prisma/client';
 import { z } from 'zod';
 
-export const runtime = 'edge';
+// Note: This route uses NextAuth which requires Node.js runtime, not edge
 
 const verificationSchema = z.object({
   type: z.nativeEnum(VerificationType),

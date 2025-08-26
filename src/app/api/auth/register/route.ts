@@ -8,7 +8,7 @@ import { EmailService } from '@/lib/email';
 import { db } from '@/lib/db';
 import crypto from 'crypto';
 
-export const runtime = 'edge';
+// Note: This route uses bcrypt which requires Node.js runtime, not edge
 
 const registerSchema = z.object({
   email: z.string().email('Invalid email address'),

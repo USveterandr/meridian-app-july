@@ -11,7 +11,6 @@ export async function GET() {
     const healthStatus = {
       status: dbHealthy ? 'healthy' : 'degraded',
       timestamp: new Date().toISOString(),
-      uptime: process.uptime(),
       environment: process.env.NODE_ENV,
       services: {
         database: dbHealthy ? 'healthy' : 'unhealthy',

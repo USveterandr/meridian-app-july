@@ -4,7 +4,7 @@ import { db } from '@/lib/db';
 import { auth } from '@/lib/auth';
 import { NotificationType } from '@prisma/client';
 
-export const runtime = 'edge';
+// Note: This route uses NextAuth which requires Node.js runtime, not edge
 
 export async function POST(request: NextRequest) {
   try {

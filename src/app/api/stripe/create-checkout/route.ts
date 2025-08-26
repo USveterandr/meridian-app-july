@@ -3,7 +3,7 @@ import { getStripe, createStripeCustomer, createCheckoutSession } from '@/lib/st
 import { db } from '@/lib/db';
 import { auth } from '@/lib/auth';
 
-export const runtime = 'edge';
+// Note: This route uses NextAuth which requires Node.js runtime, not edge
 
 export async function POST(request: NextRequest) {
   try {

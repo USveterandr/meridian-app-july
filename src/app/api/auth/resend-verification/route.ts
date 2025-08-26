@@ -4,7 +4,7 @@ import { EmailService } from '@/lib/email';
 import { z } from 'zod';
 import crypto from 'crypto';
 
-export const runtime = 'edge';
+// Note: This route uses crypto which requires Node.js runtime, not edge
 
 const resendVerificationSchema = z.object({
   email: z.string().email('Invalid email address'),

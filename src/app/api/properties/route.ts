@@ -4,7 +4,7 @@ import { auth } from '@/lib/auth';
 import { PropertyType, PropertyStatus, ListingType } from '@prisma/client';
 import { z } from 'zod';
 
-export const runtime = 'edge';
+// Note: This route uses NextAuth which requires Node.js runtime, not edge
 
 const createPropertySchema = z.object({
   title: z.string().min(1, 'Title is required'),

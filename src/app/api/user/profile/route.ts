@@ -4,7 +4,7 @@ import { db } from '@/lib/db';
 import { auth } from '@/lib/auth';
 import { z } from 'zod';
 
-export const runtime = 'edge';
+// Note: This route uses NextAuth which requires Node.js runtime, not edge
 
 const updateProfileSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters').optional(),

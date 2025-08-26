@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getUserByEmail, verifyPassword } from '@/lib/auth';
 import { z } from 'zod';
 
-export const runtime = 'edge';
+// Note: This route uses NextAuth which requires Node.js runtime, not edge
 
 const loginSchema = z.object({
   email: z.string().email('Invalid email address'),
