@@ -3,6 +3,8 @@ import { z } from 'zod';
 import { drValidationService } from '@/lib/dr-validation';
 import { asyncHandler } from '@/lib/error-handler';
 
+export const runtime = 'edge';
+
 const cedulaSchema = z.object({
   cedula: z.string().min(11, 'Cédula must be 11 digits').max(11, 'Cédula must be 11 digits'),
 });

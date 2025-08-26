@@ -4,6 +4,8 @@ import { db } from '@/lib/db';
 import { auth } from '@/lib/auth';
 import { NotificationType } from '@prisma/client';
 
+export const runtime = 'edge';
+
 export async function POST(request: NextRequest) {
   try {
     const session = await auth();

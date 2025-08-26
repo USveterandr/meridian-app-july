@@ -4,6 +4,8 @@ import { db } from '@/lib/db';
 import { auth } from '@/lib/auth';
 import { z } from 'zod';
 
+export const runtime = 'edge';
+
 const updateProfileSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters').optional(),
   phone: z.string().optional(),

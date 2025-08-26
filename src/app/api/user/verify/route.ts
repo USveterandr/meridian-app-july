@@ -4,6 +4,8 @@ import { auth } from '@/lib/auth';
 import { VerificationType, VerificationStatus } from '@prisma/client';
 import { z } from 'zod';
 
+export const runtime = 'edge';
+
 const verificationSchema = z.object({
   type: z.nativeEnum(VerificationType),
   url: z.string().url().or(z.string()),

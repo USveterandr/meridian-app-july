@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { z } from 'zod';
 
+export const runtime = 'edge';
+
 const verifyEmailSchema = z.object({
   token: z.string().min(1, 'Token is required'),
 });

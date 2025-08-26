@@ -4,6 +4,8 @@ import { EmailService } from '@/lib/email';
 import { z } from 'zod';
 import crypto from 'crypto';
 
+export const runtime = 'edge';
+
 const resendVerificationSchema = z.object({
   email: z.string().email('Invalid email address'),
 });

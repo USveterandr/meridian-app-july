@@ -3,6 +3,8 @@ import { getStripe, handleWebhook as verifyStripeWebhook } from '@/lib/stripe';
 import { SubscriptionTier, NotificationType, PaymentStatus, PaymentMethod } from '@prisma/client';
 import { db } from '@/lib/db';
 
+export const runtime = 'edge';
+
 export async function POST(request: NextRequest) {
   try {
     const payload = await request.text();

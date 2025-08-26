@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { checkDatabaseHealth } from '@/lib/db';
 import { logger } from '@/lib/logger';
 
+export const runtime = 'edge';
+
 export async function GET() {
   try {
     const dbHealthy = await checkDatabaseHealth();

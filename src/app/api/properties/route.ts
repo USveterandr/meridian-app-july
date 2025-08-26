@@ -4,6 +4,8 @@ import { auth } from '@/lib/auth';
 import { PropertyType, PropertyStatus, ListingType } from '@prisma/client';
 import { z } from 'zod';
 
+export const runtime = 'edge';
+
 const createPropertySchema = z.object({
   title: z.string().min(1, 'Title is required'),
   description: z.string().min(1, 'Description is required'),

@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { auth } from '@/lib/auth';
 
+export const runtime = 'edge';
+
 // GET /api/properties/[id] - Get single property
 export async function GET(
   request: NextRequest,

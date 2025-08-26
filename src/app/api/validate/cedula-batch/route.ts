@@ -3,6 +3,8 @@ import { drValidationService } from '@/lib/dr-validation';
 import { asyncHandler } from '@/lib/error-handler';
 import { z } from 'zod';
 
+export const runtime = 'edge';
+
 const batchValidateSchema = z.object({
   cedulas: z.array(z.string().min(11).max(11)).min(1).max(100),
 });
